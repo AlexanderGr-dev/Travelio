@@ -3,11 +3,10 @@ package com.griesbeck.travelio.ui.trips
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.griesbeck.travelio.models.Trip
 
 class TripsViewModel : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is gallery Fragment"
-    }
-    val text: LiveData<String> = _text
+    private var _trips = MutableLiveData<List<Trip>>()
+    val trips: LiveData<List<Trip>> get() = _trips
 }
