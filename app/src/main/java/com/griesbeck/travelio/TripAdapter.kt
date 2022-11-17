@@ -7,16 +7,23 @@ import androidx.recyclerview.widget.RecyclerView
 import com.griesbeck.travelio.databinding.CardTripBinding
 import com.griesbeck.travelio.models.Trip
 
-class TripAdapter(private val trips: List<Trip>) :
+interface TripListener {
+    fun onTripClick(trip: Trip)
+}
+
+class TripAdapter(private val trips: List<Trip>, private val listener: TripListener) :
     RecyclerView.Adapter<TripAdapter.ViewHolder>() {
 
 
     class ViewHolder(private val binding: CardTripBinding) : RecyclerView.ViewHolder(binding.root) {
 
-            fun bind(trip: Trip) {
+            fun bind(trip: Trip, listener: TripListener) {
                 binding.locationTitle.text = trip.location
                 binding.tvTripPeriod.text = trip.period
                 binding.tripAccomodation.text = trip.accomodation
+                binding.root.setOnClickListener {
+                    listener.onTripClick(trip)
+                }
             }
 
     }
@@ -38,7 +45,7 @@ class TripAdapter(private val trips: List<Trip>) :
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
         val trip = trips[viewHolder.adapterPosition]
-        viewHolder.bind(trip)
+        viewHolder.bind(trip, listener)
     }
 
     // Return the size of your dataset (invoked by the layout manager)
