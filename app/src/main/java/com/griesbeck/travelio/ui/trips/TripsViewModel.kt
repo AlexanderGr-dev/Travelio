@@ -29,6 +29,10 @@ class TripsViewModel: ViewModel() {
         repo.updateTrip(trip)
     }
 
+    fun deleteTrip(trip: Trip){
+        repo.removeTrip(trip)
+    }
+
 
 
 }

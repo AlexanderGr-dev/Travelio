@@ -5,8 +5,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.griesbeck.travelio.databinding.ActivityTripDetailBinding
 import com.griesbeck.travelio.models.Trip
+import com.griesbeck.travelio.ui.trips.TripsViewModel
 
 class TripDetailActivity : AppCompatActivity() {
 
@@ -44,6 +47,9 @@ class TripDetailActivity : AppCompatActivity() {
                 tripDetailIntent.putExtra("trip_edit",trip)
                 startActivity(tripDetailIntent)
             }
+            R.id.item_delete -> {
+                deleteDialog()
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -53,5 +59,23 @@ class TripDetailActivity : AppCompatActivity() {
         binding.tvDetailDateContent.text = trip?.period
         binding.tvDetailCostsContent.text = trip?.costs
         binding.tvDetailAccomodationContent.text = trip?.accomodation
+    }
+
+    private fun deleteDialog() {
+        val builder = MaterialAlertDialogBuilder(this)
+        builder.setTitle("Delete")
+        builder.setMessage("Do you really want to delete this trip?")
+        builder.setNeutralButton("Cancel") { dialog, which ->
+            dialog.dismiss()
+        }
+        builder.setPositiveButton("Delete") { dialog, which ->
+            val tripsViewModel =
+                ViewModelProvider(this).get(TripsViewModel::class.java)
+            trip?.let { tripsViewModel.deleteTrip(it) }
+            dialog.dismiss()
+            val mainView = Intent(this,MainActivity::class.java)
+            startActivity(mainView)
+        }
+        builder.show()
     }
 }

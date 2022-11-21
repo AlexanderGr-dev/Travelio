@@ -19,5 +19,6 @@
     <string name="btn_add_trip">Add trip</string>
     <string name="hint_costs">Amount</string>
     <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 
 </resources>

@@ -39,7 +39,9 @@ class TripMemStore(): TripStore {
     }
 
     override fun delete(trip: Trip) {
-        TODO("Not yet implemented")
+        if(trip in trips) {
+            trips.remove(trip)
+        }
     }
 
     companion object Factory{

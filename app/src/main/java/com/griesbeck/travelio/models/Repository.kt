@@ -15,4 +15,8 @@ class Repository(private val store: TripStore) {
     fun updateTrip(trip: Trip) {
         return store.update(trip)
     }
+
+    fun removeTrip(trip: Trip){
+        return store.delete(trip)
+    }
 }
