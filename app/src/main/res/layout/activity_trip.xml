@@ -165,7 +165,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/secondary"
             android:textColor="@color/white"
-            android:text="@string/btn_save_trip"
+            android:text="@string/btn_add_trip"
             android:textAlignment="center"
             android:textSize="20sp"
             android:textStyle="bold"

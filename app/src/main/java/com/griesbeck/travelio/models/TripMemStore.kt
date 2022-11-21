@@ -29,7 +29,13 @@ class TripMemStore(): TripStore {
     }
 
     override fun update(trip: Trip) {
-        TODO("Not yet implemented")
+        var foundTrip: Trip? = trips.find { t -> t.id == trip.id  }
+        if(foundTrip != null){
+            foundTrip.location = trip.location
+            foundTrip.period = trip.period
+            foundTrip.costs = trip.costs
+            foundTrip.accomodation = trip.accomodation
+        }
     }
 
     override fun delete(trip: Trip) {

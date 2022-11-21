@@ -25,6 +25,10 @@ class TripsViewModel: ViewModel() {
         repo.addTrip(trip)
     }
 
+    fun updateTrip(trip: Trip){
+        repo.updateTrip(trip)
+    }
+
 
 
 }

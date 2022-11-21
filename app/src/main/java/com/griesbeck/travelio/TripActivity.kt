@@ -1,6 +1,7 @@
 package com.griesbeck.travelio
 
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -21,6 +22,7 @@ class TripActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        var edit: Boolean = false
         binding = ActivityTripBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -30,18 +32,29 @@ class TripActivity : AppCompatActivity() {
         val tripsViewModel =
             ViewModelProvider(this).get(TripsViewModel::class.java)
 
+        if(intent.hasExtra("trip_edit")){
+            edit = true
+            binding.btnAdd.text = "Save trip"
+            trip = intent.extras?.getParcelable("trip_edit")!!
+            bindTripEditData(trip)
+        }
+
 
         binding.etDate.setOnClickListener {
             setDate()
         }
 
         binding.btnAdd.setOnClickListener {
-            trip.location = binding.etLocation.text.toString()
-            trip.period = binding.etDate.text.toString()
-            trip.accomodation = binding.etAccomodation.text.toString()
-            trip.costs = binding.etAccomodation.text.toString()
-            tripsViewModel.addTrip(trip)
-            finish()
+            addTripData()
+            if(!edit) {
+                tripsViewModel.addTrip(trip)
+                finish()
+            }else{
+                tripsViewModel.updateTrip(trip)
+                val tripDetailIntent = Intent(this, TripDetailActivity::class.java)
+                tripDetailIntent.putExtra("trip_detail",trip)
+                startActivity(tripDetailIntent)
+            }
         }
 
 
@@ -83,5 +96,19 @@ class TripActivity : AppCompatActivity() {
             val period = "${startdate}   -   ${endDate}"
             binding.etDate.setText(period)
         }
+    }
+
+    private fun addTripData(){
+        trip.location = binding.etLocation.text.toString()
+        trip.period = binding.etDate.text.toString()
+        trip.accomodation = binding.etAccomodation.text.toString()
+        trip.costs = binding.etCosts.text.toString()
+    }
+
+    private fun bindTripEditData(trip: Trip){
+        binding.etLocation.setText(trip.location)
+        binding.etDate.setText(trip.period)
+        binding.etAccomodation.setText(trip.accomodation)
+        binding.etCosts.setText(trip.costs)
     }
 }
