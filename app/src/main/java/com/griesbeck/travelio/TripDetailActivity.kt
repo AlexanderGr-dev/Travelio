@@ -23,10 +23,7 @@ class TripDetailActivity : AppCompatActivity() {
 
         if(intent.hasExtra("trip_detail")) {
             trip = intent.extras?.getParcelable("trip_detail")
-            binding.tvDetailLocationContent.text = trip?.location
-            binding.tvDetailDateContent.text = trip?.period
-            binding.tvDetailCostsContent.text = trip?.costs
-            binding.tvDetailAccomodationContent.text = trip?.accomodation
+            bindTripDetailData(trip)
         }
 
     }
@@ -49,5 +46,12 @@ class TripDetailActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun bindTripDetailData(trip: Trip?){
+        binding.tvDetailLocationContent.text = trip?.location
+        binding.tvDetailDateContent.text = trip?.period
+        binding.tvDetailCostsContent.text = trip?.costs
+        binding.tvDetailAccomodationContent.text = trip?.accomodation
     }
 }

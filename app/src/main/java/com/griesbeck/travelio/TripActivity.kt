@@ -36,10 +36,7 @@ class TripActivity : AppCompatActivity() {
             edit = true
             binding.btnAdd.text = "Save trip"
             trip = intent.extras?.getParcelable("trip_edit")!!
-            binding.etLocation.setText(trip.location)
-            binding.etDate.setText(trip.period)
-            binding.etAccomodation.setText(trip.accomodation)
-            binding.etCosts.setText(trip.costs)
+            bindTripEditData(trip)
         }
 
 
@@ -48,10 +45,7 @@ class TripActivity : AppCompatActivity() {
         }
 
         binding.btnAdd.setOnClickListener {
-            trip.location = binding.etLocation.text.toString()
-            trip.period = binding.etDate.text.toString()
-            trip.accomodation = binding.etAccomodation.text.toString()
-            trip.costs = binding.etCosts.text.toString()
+            addTripData()
             if(!edit) {
                 tripsViewModel.addTrip(trip)
                 finish()
@@ -102,5 +96,19 @@ class TripActivity : AppCompatActivity() {
             val period = "${startdate}   -   ${endDate}"
             binding.etDate.setText(period)
         }
+    }
+
+    private fun addTripData(){
+        trip.location = binding.etLocation.text.toString()
+        trip.period = binding.etDate.text.toString()
+        trip.accomodation = binding.etAccomodation.text.toString()
+        trip.costs = binding.etCosts.text.toString()
+    }
+
+    private fun bindTripEditData(trip: Trip){
+        binding.etLocation.setText(trip.location)
+        binding.etDate.setText(trip.period)
+        binding.etAccomodation.setText(trip.accomodation)
+        binding.etCosts.setText(trip.costs)
     }
 }
