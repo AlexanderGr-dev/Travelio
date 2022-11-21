@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.griesbeck.travelio.databinding.CardTripBinding
 import com.griesbeck.travelio.models.Trip
+import com.squareup.picasso.Picasso
 
 interface TripListener {
     fun onTripClick(trip: Trip)
@@ -18,6 +19,7 @@ class TripAdapter(private val trips: List<Trip>, private val listener: TripListe
     class ViewHolder(private val binding: CardTripBinding) : RecyclerView.ViewHolder(binding.root) {
 
             fun bind(trip: Trip, listener: TripListener) {
+                Picasso.get().load(trip.image).into(binding.ivLocation)
                 binding.locationTitle.text = trip.location
                 binding.tvTripPeriod.text = trip.period
                 binding.tripAccomodation.text = trip.accomodation
