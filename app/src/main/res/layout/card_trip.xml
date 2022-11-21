@@ -18,8 +18,9 @@
             android:id="@+id/iv_location"
             android:layout_width="match_parent"
             android:layout_height="194dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
             app:srcCompat="@drawable/berg"
-            android:scaleType="centerCrop"
             android:contentDescription="Content Description"
             />
 
