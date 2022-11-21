@@ -10,6 +10,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.griesbeck.travelio.databinding.ActivityTripDetailBinding
 import com.griesbeck.travelio.models.Trip
 import com.griesbeck.travelio.ui.trips.TripsViewModel
+import com.squareup.picasso.Picasso
 
 class TripDetailActivity : AppCompatActivity() {
 
@@ -55,6 +56,7 @@ class TripDetailActivity : AppCompatActivity() {
     }
 
     private fun bindTripDetailData(trip: Trip?){
+        Picasso.get().load(trip?.image).into(binding.tripImage)
         binding.tvDetailLocationContent.text = trip?.location
         binding.tvDetailDateContent.text = trip?.period
         binding.tvDetailCostsContent.text = trip?.costs

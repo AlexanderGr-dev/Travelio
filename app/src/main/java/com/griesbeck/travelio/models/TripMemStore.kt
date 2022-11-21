@@ -13,9 +13,9 @@ class TripMemStore(): TripStore {
 
     init {
         //for testing
-        trips.add(Trip(34534,"Regensburg", "24.11 - 12.12.2022", "Hotel Donaublick"))
+        /*trips.add(Trip(34534,"Regensburg", "24.11 - 12.12.2022", "Hotel Donaublick"))
         trips.add(Trip(34535,"Regensburg", "24.11 - 12.12.2022", "Hotel Donaublick"))
-        trips.add(Trip(3344,"München", "24.11 - 12.12.2022", "Hotel Donaublick"))
+        trips.add(Trip(3344,"München", "24.11 - 12.12.2022", "Hotel Donaublick"))*/
     }
 
 

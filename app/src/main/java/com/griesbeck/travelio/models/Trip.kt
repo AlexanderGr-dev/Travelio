@@ -6,6 +6,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Trip(var id: Long = 0,
+                var image: Uri = Uri.EMPTY,
                 var location: String = "",
                 var period: String = "",
                 var accomodation: String = "",

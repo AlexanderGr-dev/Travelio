@@ -17,8 +17,12 @@
     <string name="hint_accomodation_name">Name of accomodation</string>
     <string name="tv_costs">Costs</string>
     <string name="btn_add_trip">Add trip</string>
+    <string name="btn_save_trip">Save trip</string>
     <string name="hint_costs">Amount</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="tv_image">Trip Image</string>
+    <string name="btn_choose_image">Choose image</string>
+    <string name="btn_change_image">Choose image</string>
 
 </resources>

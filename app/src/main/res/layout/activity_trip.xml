@@ -19,163 +19,213 @@
         app:menu="@menu/menu_trip_add"
         app:popupTheme="@style/Theme.Travelio.PopupOverlay"
          />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tv_location"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/tv_location"
-            android:textColor="@color/primary"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:paddingStart="10dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            android:layout_height="match_parent">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tf_location"
-            style="?attr/textInputFilledStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_location"
-            android:padding="10dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_location">
-
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_location"
+            <TextView
+                android:id="@+id/tv_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-            android:id="@+id/tv_period"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/tv_date"
-            android:textColor="@color/primary"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:paddingStart="10dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tf_location"/>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tf_period"
-            style="?attr/textInputFilledStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_period"
-            android:padding="10dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_period">
+                android:text="@string/tv_image"
+                android:textColor="@color/primary"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:paddingStart="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_date"
+            <ImageView
+                android:id="@+id/iv_trip_image_choose"
+                android:layout_width="226dp"
+                android:layout_height="185dp"
+                android:layout_marginTop="4dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                android:background="@drawable/round_image_bg"
+                android:clipToOutline="true"
+                app:layout_constraintHorizontal_bias="0.05"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_image"
+                app:srcCompat="@drawable/placeholder" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_choose_image"
+                style="@style/Widget.Material3.Button.ElevatedButton.Icon"
+                android:layout_width="119dp"
+                android:layout_height="74dp"
+                android:layout_marginTop="104dp"
+                android:backgroundTint="@color/secondary"
+                android:text="@string/btn_choose_image"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintHorizontal_bias="0.421"
+                app:layout_constraintLeft_toRightOf="@id/iv_trip_image_choose"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_image" />
+
+            <TextView
+                android:id="@+id/tv_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:clickable="false"
-                android:cursorVisible="false"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:text="@string/tv_location"
+                android:textColor="@color/primary"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:paddingStart="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_trip_image_choose"/>
 
-        <TextView
-            android:id="@+id/tv_accomodation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/tv_accomodation"
-            android:textColor="@color/primary"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:paddingStart="10dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tf_period"/>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tf_accomodation_name"
-            style="?attr/textInputFilledStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_accomodation_name"
-            android:padding="10dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_accomodation">
-
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_accomodation"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tf_location"
+                style="?attr/textInputFilledStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-            android:id="@+id/tv_costs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/tv_costs"
-            android:textColor="@color/primary"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:paddingStart="10dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tf_accomodation_name"/>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tf_costs"
-            style="?attr/textInputFilledStyle"
-            android:layout_width="245dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_costs"
-            android:padding="10dp"
-            app:suffixText="€"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_costs">
+                android:hint="@string/hint_location"
+                android:padding="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_location">
 
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_costs"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tv_period"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:text="@string/tv_date"
+                android:textColor="@color/primary"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:paddingStart="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tf_location"/>
 
-        <com.google.android.material.button.MaterialButton
-            style="@style/Widget.Material3.Button.ElevatedButton.Icon"
-            android:id="@+id/btn_add"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/secondary"
-            android:textColor="@color/white"
-            android:text="@string/btn_add_trip"
-            android:textAlignment="center"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:icon="@drawable/ic_baseline_add_24"
-            app:iconTint="@color/white"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tf_costs"/>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tf_period"
+                style="?attr/textInputFilledStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_period"
+                android:padding="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_period">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tv_accomodation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/tv_accomodation"
+                android:textColor="@color/primary"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:paddingStart="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tf_period"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tf_accomodation_name"
+                style="?attr/textInputFilledStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_accomodation_name"
+                android:padding="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_accomodation">
+
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_accomodation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tv_costs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/tv_costs"
+                android:textColor="@color/primary"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:paddingStart="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tf_accomodation_name"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tf_costs"
+                style="?attr/textInputFilledStyle"
+                android:layout_width="245dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_costs"
+                android:padding="10dp"
+                app:suffixText="€"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_costs">
+
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_costs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                style="@style/Widget.Material3.Button.ElevatedButton.Icon"
+                android:id="@+id/btn_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/secondary"
+                android:textColor="@color/white"
+                android:text="@string/btn_add_trip"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:icon="@drawable/ic_baseline_add_24"
+                app:iconTint="@color/white"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tf_costs"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
 
 </LinearLayout>
