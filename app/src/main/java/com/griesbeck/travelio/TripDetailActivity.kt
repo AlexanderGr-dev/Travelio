@@ -39,7 +39,8 @@ class TripDetailActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.item_previous -> {
-                finish()
+                val mainView = Intent(this,MainActivity::class.java)
+                startActivity(mainView)
             }
             R.id.item_edit -> {
                 val tripDetailIntent = Intent(this, TripActivity::class.java)
