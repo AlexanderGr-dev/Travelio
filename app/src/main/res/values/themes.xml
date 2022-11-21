@@ -22,4 +22,5 @@
     <style name="Theme.Travelio.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.Travelio.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
 </resources>
