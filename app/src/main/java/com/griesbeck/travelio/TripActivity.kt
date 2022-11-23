@@ -7,13 +7,18 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.griesbeck.travelio.databinding.ActivityTripBinding
 import androidx.core.util.Pair
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.griesbeck.travelio.models.Sight
 import com.griesbeck.travelio.models.Trip
 import com.griesbeck.travelio.ui.trips.TripsViewModel
 import com.squareup.picasso.Picasso
@@ -23,6 +28,8 @@ class TripActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTripBinding
     private lateinit var imageIntentLauncher : ActivityResultLauncher<Intent>
+    private lateinit var mapIntentLauncher : ActivityResultLauncher<Intent>
+    private val layoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false)
     var trip = Trip()
 
 
@@ -72,8 +79,25 @@ class TripActivity : AppCompatActivity() {
 
         registerImagePickerCallback()
 
+        binding.btnAddSights.setOnClickListener {
+            val mapsIntent = Intent(this,MapsActivity::class.java)
+            mapIntentLauncher.launch(mapsIntent)
+        }
+
+        registerMapCallback()
 
     }
+
+ /*   override fun onResume() {
+        super.onResume()
+
+        val tripsViewModel = ViewModelProvider(this).get(TripsViewModel::class.java)
+
+        tripsViewModel.trips.observe(viewLifecycleOwner, Observer { trips ->
+            binding.rvSights.layoutManager = layoutManager
+            binding.rvSights.adapter = SightsAdapter(trips)
+        })
+    }*/
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_trip_add, menu)
@@ -155,6 +179,26 @@ class TripActivity : AppCompatActivity() {
                     else -> {
                         Toast.makeText(this, "Some error occured", Toast.LENGTH_SHORT).show()
                     }
+                }
+            }
+    }
+
+    private fun registerMapCallback() {
+        mapIntentLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+            { result ->
+                when (result.resultCode) {
+                    RESULT_OK -> {
+                        if (result.data != null) {
+
+                            trip.sights = result.data!!.extras?.getParcelableArrayList("sights")!!
+                            binding.rvSights.layoutManager = layoutManager
+                            binding.rvSights.adapter = SightsAdapter(trip.sights)
+
+
+                        } // end of if
+                    }
+                    RESULT_CANCELED -> { } else -> { }
                 }
             }
     }
