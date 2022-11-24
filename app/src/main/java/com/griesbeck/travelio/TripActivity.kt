@@ -18,13 +18,14 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.griesbeck.travelio.models.Sight
 import com.griesbeck.travelio.models.Trip
 import com.griesbeck.travelio.ui.trips.TripsViewModel
 import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
 
-class TripActivity : AppCompatActivity() {
+class TripActivity : AppCompatActivity(), SightDeleteListener {
 
     private lateinit var binding: ActivityTripBinding
     private lateinit var imageIntentLauncher : ActivityResultLauncher<Intent>
@@ -85,6 +86,7 @@ class TripActivity : AppCompatActivity() {
         }
 
         registerMapCallback()
+
 
     }
 
@@ -150,6 +152,8 @@ class TripActivity : AppCompatActivity() {
         binding.etDate.setText(trip.period)
         binding.etAccomodation.setText(trip.accomodation)
         binding.etCosts.setText(trip.costs)
+        binding.rvSights.layoutManager = layoutManager
+        binding.rvSights.adapter = SightsAdapter(trip.sights,this)
     }
 
     private fun registerImagePickerCallback() {
@@ -191,9 +195,26 @@ class TripActivity : AppCompatActivity() {
                     RESULT_OK -> {
                         if (result.data != null) {
 
-                            trip.sights = result.data!!.extras?.getParcelableArrayList("sights")!!
-                            binding.rvSights.layoutManager = layoutManager
-                            binding.rvSights.adapter = SightsAdapter(trip.sights)
+                            if(trip.sights.isEmpty()) {
+                                trip.sights =
+                                    result.data!!.extras?.getParcelableArrayList("sights")!!
+                            }else{
+                                val sights: ArrayList<Sight> = result.data!!.extras?.getParcelableArrayList("sights")!!
+                                val mSights = trip.sights.toMutableList()
+                                sights.forEach { sight ->
+                                    mSights.add(sight)
+                                }
+                                trip.sights = mSights
+                            }
+                            val tripsViewModel =
+                                ViewModelProvider(this).get(TripsViewModel::class.java)
+
+                            tripsViewModel.getSights(trip)
+
+                            tripsViewModel.sights.observe(this) { sights ->
+                                binding.rvSights.layoutManager = layoutManager
+                                binding.rvSights.adapter = SightsAdapter(sights, this)
+                            }
 
 
                         } // end of if
@@ -201,5 +222,26 @@ class TripActivity : AppCompatActivity() {
                     RESULT_CANCELED -> { } else -> { }
                 }
             }
+    }
+
+    override fun onDeleteClick(sight: Sight) {
+        deleteSightDialog(sight)
+    }
+
+    private fun deleteSightDialog(sight: Sight) {
+        val builder = MaterialAlertDialogBuilder(this)
+        builder.setTitle("Delete")
+        builder.setMessage("Do you really want to delete this sight?")
+        builder.setNeutralButton("Cancel") { dialog, which ->
+            dialog.dismiss()
+        }
+        builder.setPositiveButton("Delete") { dialog, which ->
+            val tripsViewModel =
+                ViewModelProvider(this).get(TripsViewModel::class.java)
+
+            tripsViewModel.deleteSight(sight,trip)
+            dialog.dismiss()
+        }
+        builder.show()
     }
 }

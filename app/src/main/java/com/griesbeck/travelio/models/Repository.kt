@@ -19,4 +19,8 @@ class Repository(private val store: TripStore) {
     fun removeTrip(trip: Trip){
         return store.delete(trip)
     }
+
+    fun removeSight(sight: Sight, trip: Trip) {
+        return store.removeSight(sight,trip)
+    }
 }

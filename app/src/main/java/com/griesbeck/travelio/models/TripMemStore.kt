@@ -35,6 +35,7 @@ class TripMemStore(): TripStore {
             foundTrip.period = trip.period
             foundTrip.costs = trip.costs
             foundTrip.accomodation = trip.accomodation
+            foundTrip.sights = trip.sights
         }
     }
 
@@ -43,6 +44,13 @@ class TripMemStore(): TripStore {
             trips.remove(trip)
         }
     }
+
+    override fun removeSight(sight: Sight, trip: Trip) {
+        if(sight in trip.sights){
+            trip.sights.remove(sight)
+        }
+    }
+
 
     companion object Factory{
         @Volatile private var instance: TripMemStore? = null
