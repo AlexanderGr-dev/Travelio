@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.griesbeck.travelio.databinding.ActivityTripDetailBinding
 import com.griesbeck.travelio.models.Trip
@@ -15,6 +16,7 @@ import com.squareup.picasso.Picasso
 class TripDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTripDetailBinding
+    private val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
     private var trip: Trip? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,6 +63,8 @@ class TripDetailActivity : AppCompatActivity() {
         binding.tvDetailDateContent.text = trip?.period
         binding.tvDetailCostsContent.text = trip?.costs
         binding.tvDetailAccomodationContent.text = trip?.accomodation
+        binding.rvSightsDetail.layoutManager = layoutManager
+        binding.rvSightsDetail.adapter = SightsDetailAdapter(trip!!.sights)
     }
 
     private fun deleteDialog() {
