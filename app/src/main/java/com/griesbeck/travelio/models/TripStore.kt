@@ -5,4 +5,5 @@ interface TripStore {
     fun create(trip: Trip)
     fun update(trip: Trip)
     fun delete(trip: Trip)
+    fun removeSight(sight: Sight, trip: Trip)
 }

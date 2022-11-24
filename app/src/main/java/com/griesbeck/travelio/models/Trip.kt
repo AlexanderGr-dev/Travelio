@@ -10,4 +10,5 @@ data class Trip(var id: Long = 0,
                 var location: String = "",
                 var period: String = "",
                 var accomodation: String = "",
-                var costs: String = "") : Parcelable
+                var costs: String = "",
+                var sights: MutableList<Sight> = mutableListOf() ) : Parcelable

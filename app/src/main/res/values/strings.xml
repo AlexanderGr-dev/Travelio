@@ -24,5 +24,8 @@
     <string name="tv_image">Trip Image</string>
     <string name="btn_choose_image">Choose image</string>
     <string name="btn_change_image">Choose image</string>
+    <string name="tv_sights">Sights</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="btn_add_sights">Add sights</string>
 
 </resources>
