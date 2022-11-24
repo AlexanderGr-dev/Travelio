@@ -1,4 +1,4 @@
-package com.griesbeck.travelio
+package com.griesbeck.travelio.ui.activities
 
 
 import android.content.Intent
@@ -7,21 +7,19 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.griesbeck.travelio.databinding.ActivityTripBinding
 import androidx.core.util.Pair
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.griesbeck.travelio.*
 import com.griesbeck.travelio.models.Sight
 import com.griesbeck.travelio.models.Trip
-import com.griesbeck.travelio.ui.trips.TripsViewModel
+import com.griesbeck.travelio.ui.viewmodels.TripsViewModel
 import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
 
@@ -81,7 +79,7 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
         registerImagePickerCallback()
 
         binding.btnAddSights.setOnClickListener {
-            val mapsIntent = Intent(this,MapsActivity::class.java)
+            val mapsIntent = Intent(this, MapsActivity::class.java)
             mapIntentLauncher.launch(mapsIntent)
         }
 

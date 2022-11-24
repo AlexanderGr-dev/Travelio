@@ -1,6 +1,5 @@
-package com.griesbeck.travelio
+package com.griesbeck.travelio.ui.activities
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ContentValues
 import android.content.Intent
@@ -20,10 +19,10 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.griesbeck.travelio.BuildConfig
+import com.griesbeck.travelio.R
 import com.griesbeck.travelio.databinding.ActivityMapsBinding
 import com.griesbeck.travelio.models.Sight
-import pub.devrel.easypermissions.AfterPermissionGranted
-import pub.devrel.easypermissions.EasyPermissions
 import java.util.*
 import kotlin.collections.ArrayList
 

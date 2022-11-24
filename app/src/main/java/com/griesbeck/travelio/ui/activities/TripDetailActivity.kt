@@ -1,4 +1,4 @@
-package com.griesbeck.travelio
+package com.griesbeck.travelio.ui.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -8,9 +8,11 @@ import android.view.MenuItem
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.griesbeck.travelio.R
+import com.griesbeck.travelio.ui.adapters.SightsDetailAdapter
 import com.griesbeck.travelio.databinding.ActivityTripDetailBinding
 import com.griesbeck.travelio.models.Trip
-import com.griesbeck.travelio.ui.trips.TripsViewModel
+import com.griesbeck.travelio.ui.viewmodels.TripsViewModel
 import com.squareup.picasso.Picasso
 
 class TripDetailActivity : AppCompatActivity() {
@@ -42,7 +44,7 @@ class TripDetailActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.item_previous -> {
-                val mainView = Intent(this,MainActivity::class.java)
+                val mainView = Intent(this, MainActivity::class.java)
                 startActivity(mainView)
             }
             R.id.item_edit -> {
@@ -79,7 +81,7 @@ class TripDetailActivity : AppCompatActivity() {
                 ViewModelProvider(this).get(TripsViewModel::class.java)
             trip?.let { tripsViewModel.deleteTrip(it) }
             dialog.dismiss()
-            val mainView = Intent(this,MainActivity::class.java)
+            val mainView = Intent(this, MainActivity::class.java)
             startActivity(mainView)
         }
         builder.show()

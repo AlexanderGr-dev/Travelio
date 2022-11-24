@@ -1,4 +1,4 @@
-package com.griesbeck.travelio
+package com.griesbeck.travelio.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

@@ -1,22 +1,20 @@
-package com.griesbeck.travelio.ui.trips
+package com.griesbeck.travelio.ui.fragments
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.griesbeck.travelio.TripActivity
 import com.griesbeck.travelio.TripAdapter
-import com.griesbeck.travelio.TripDetailActivity
+import com.griesbeck.travelio.ui.activities.TripDetailActivity
 import com.griesbeck.travelio.TripListener
 import com.griesbeck.travelio.databinding.FragmentTripsBinding
 import com.griesbeck.travelio.models.Trip
+import com.griesbeck.travelio.ui.viewmodels.TripsViewModel
 
 class TripsFragment : Fragment(), TripListener {
 

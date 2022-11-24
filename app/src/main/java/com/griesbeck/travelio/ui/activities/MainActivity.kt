@@ -1,4 +1,4 @@
-package com.griesbeck.travelio
+package com.griesbeck.travelio.ui.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,6 +11,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
+import com.griesbeck.travelio.R
 import com.griesbeck.travelio.databinding.ActivityMainBinding
 
 
@@ -38,7 +39,7 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-               R.id.nav_trips
+                R.id.nav_trips
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
