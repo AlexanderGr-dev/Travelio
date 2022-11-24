@@ -1,13 +1,12 @@
 package com.griesbeck.travelio
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ContentValues
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import androidx.core.os.bundleOf
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.common.api.Status
 
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -15,7 +14,6 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PointOfInterest
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
@@ -24,7 +22,8 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.griesbeck.travelio.databinding.ActivityMapsBinding
 import com.griesbeck.travelio.models.Sight
-import com.griesbeck.travelio.ui.trips.TripsViewModel
+import pub.devrel.easypermissions.AfterPermissionGranted
+import pub.devrel.easypermissions.EasyPermissions
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -78,8 +77,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
+        map.uiSettings.setZoomControlsEnabled(true)
 
-        val sydney = LatLng(-34.0, 151.0)
+        val sydney = LatLng(49.0, 12.1)
         map.moveCamera(CameraUpdateFactory.newLatLng(sydney))
         map.setOnPoiClickListener { poi ->
 
@@ -111,4 +111,5 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
         builder.show()
     }
+
 }
