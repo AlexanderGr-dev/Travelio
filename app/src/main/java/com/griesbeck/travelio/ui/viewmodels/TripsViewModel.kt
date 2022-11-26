@@ -3,26 +3,23 @@ package com.griesbeck.travelio.ui.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.griesbeck.travelio.models.Repository
-import com.griesbeck.travelio.models.Sight
-import com.griesbeck.travelio.models.Trip
-import com.griesbeck.travelio.models.TripMemStore
+import com.griesbeck.travelio.models.*
 
 class TripsViewModel: ViewModel() {
 
-    private val repo : Repository = Repository(TripMemStore.getInstance())
+    private val repo : Repository = Repository(TripFirebaseStore())
     private val _trips = MutableLiveData<List<Trip>>()
     val trips: LiveData<List<Trip>> get() = _trips
     private val _sights = MutableLiveData<List<Sight>>()
     val sights: LiveData<List<Sight>> get() = _sights
 
     init{
-        getTrips()
+        fetchTrips(_trips)
     }
 
 
-    private fun getTrips(){
-        _trips.value = repo.getTrips()
+    private fun fetchTrips(liveData: MutableLiveData<List<Trip>>){
+        repo.fetchTrips(liveData)
     }
 
 
@@ -30,7 +27,7 @@ class TripsViewModel: ViewModel() {
         repo.addTrip(trip)
     }
 
-    fun updateTrip(trip: Trip){
+   fun updateTrip(trip: Trip){
         repo.updateTrip(trip)
     }
 
@@ -39,8 +36,7 @@ class TripsViewModel: ViewModel() {
     }
 
     fun deleteSight(sight: Sight, trip: Trip) {
-        repo.removeSight(sight,trip)
-        _sights.value = trip.sights
+        repo.removeSight(_sights,sight,trip)
     }
 
     fun getSights(trip: Trip) {
