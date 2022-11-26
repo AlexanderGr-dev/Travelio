@@ -3,6 +3,7 @@ package com.griesbeck.travelio
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.griesbeck.travelio.databinding.CardTripBinding
 import com.griesbeck.travelio.models.Trip
@@ -19,7 +20,7 @@ class TripAdapter(private val trips: List<Trip>, private val listener: TripListe
     class ViewHolder(private val binding: CardTripBinding) : RecyclerView.ViewHolder(binding.root) {
 
             fun bind(trip: Trip, listener: TripListener) {
-                Picasso.get().load(trip.image).into(binding.ivLocation)
+                Picasso.get().load(trip.image.toUri()).into(binding.ivLocation)
                 binding.locationTitle.text = trip.location
                 binding.tvTripPeriod.text = trip.period
                 binding.tripAccomodation.text = trip.accomodation
@@ -33,8 +34,6 @@ class TripAdapter(private val trips: List<Trip>, private val listener: TripListe
     // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         // Create a new view, which defines the UI of the list item
-        /*val view = LayoutInflater.from(viewGroup.context)
-            .inflate(CardTripBinding, viewGroup, false)*/
         val view = CardTripBinding
             .inflate(LayoutInflater.from(viewGroup.context), viewGroup, false)
 

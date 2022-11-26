@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -60,7 +61,7 @@ class TripDetailActivity : AppCompatActivity() {
     }
 
     private fun bindTripDetailData(trip: Trip?){
-        Picasso.get().load(trip?.image).into(binding.tripImage)
+        Picasso.get().load(trip?.image?.toUri()).into(binding.tripImage)
         binding.tvDetailLocationContent.text = trip?.location
         binding.tvDetailDateContent.text = trip?.period
         binding.tvDetailCostsContent.text = trip?.costs

@@ -1,5 +1,6 @@
 package com.griesbeck.travelio.ui.adapters
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -7,8 +8,10 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.*
+import com.griesbeck.travelio.BuildConfig
 import com.griesbeck.travelio.databinding.CardSightDetailBinding
 import com.griesbeck.travelio.models.Sight
+import java.util.*
 
 class SightsDetailAdapter(private val sights: List<Sight>) :
     RecyclerView.Adapter<SightsDetailAdapter.ViewHolder>() {
@@ -16,9 +19,9 @@ class SightsDetailAdapter(private val sights: List<Sight>) :
 
     class ViewHolder(private val binding: CardSightDetailBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        val placesClient: PlacesClient = Places.createClient(itemView.context)
-
         fun bind(sight: Sight) {
+            checkPlacesInitialized(itemView.context)
+            val placesClient: PlacesClient = Places.createClient(itemView.context)
             val placeId = sight.placeId
             val fields = listOf(Place.Field.PHOTO_METADATAS, Place.Field.NAME)
             val placeRequest = FetchPlaceRequest.newInstance(placeId, fields)
@@ -32,9 +35,6 @@ class SightsDetailAdapter(private val sights: List<Sight>) :
                         return@addOnSuccessListener
                     }
                     val photoMetadata = metada.first()
-
-                    // Get the attribution text.
-                    val attributions = photoMetadata?.attributions
 
                     // Create a FetchPhotoRequest.
                     val photoRequest = FetchPhotoRequest.builder(photoMetadata)
@@ -54,6 +54,12 @@ class SightsDetailAdapter(private val sights: List<Sight>) :
                         }
                 }
         }
+
+        private fun checkPlacesInitialized(context: Context){
+            if (!Places.isInitialized()) {
+                Places.initialize(context, BuildConfig.MAPS_API_KEY, Locale.US) }
+        }
+
 
     }
 
