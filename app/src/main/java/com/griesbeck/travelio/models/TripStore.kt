@@ -1,9 +1,11 @@
 package com.griesbeck.travelio.models
 
+import androidx.lifecycle.MutableLiveData
+
 interface TripStore {
-    fun findAll(): List<Trip>
+    fun fetchTripData(liveData: MutableLiveData<List<Trip>>)
     fun create(trip: Trip)
     fun update(trip: Trip)
     fun delete(trip: Trip)
-    fun removeSight(sight: Sight, trip: Trip)
+    fun removeSight(liveData: MutableLiveData<List<Sight>>,sight: Sight, trip: Trip)
 }

@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.net.toUri
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.griesbeck.travelio.databinding.ActivityTripBinding
 import androidx.core.util.Pair
@@ -47,7 +48,7 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
         if(intent.hasExtra("trip_edit")){
             edit = true
             binding.btnAdd.text = getString(R.string.btn_save_trip)
-            if(trip.image != Uri.EMPTY) {
+            if(trip.image.toUri() != Uri.EMPTY) {
                 binding.btnChooseImage.text = getString(R.string.btn_change_image)
             }
             trip = intent.extras?.getParcelable("trip_edit")!!
@@ -145,13 +146,20 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
     }
 
     private fun bindTripEditData(trip: Trip){
-        Picasso.get().load(trip.image).into(binding.ivTripImageChoose)
+        val tripsViewModel =
+            ViewModelProvider(this).get(TripsViewModel::class.java)
+
+        Picasso.get().load(trip.image.toUri()).into(binding.ivTripImageChoose)
         binding.etLocation.setText(trip.location)
         binding.etDate.setText(trip.period)
         binding.etAccomodation.setText(trip.accomodation)
         binding.etCosts.setText(trip.costs)
         binding.rvSights.layoutManager = layoutManager
-        binding.rvSights.adapter = SightsAdapter(trip.sights,this)
+        binding.rvSights.adapter = SightsAdapter(trip.sights, this)
+        tripsViewModel.sights.observe(this) { sights ->
+            binding.rvSights.layoutManager = layoutManager
+            binding.rvSights.adapter = SightsAdapter(sights, this)
+        }
     }
 
     private fun registerImagePickerCallback() {
@@ -167,7 +175,7 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
                                 image,
                                 Intent.FLAG_GRANT_READ_URI_PERMISSION
                             )
-                            trip.image = image
+                            trip.image = image.toString()
 
                             Picasso.get()
                                 .load(trip.image)

@@ -1,11 +1,12 @@
 package com.griesbeck.travelio.models
 
+import androidx.lifecycle.MutableLiveData
 
 
 class Repository(private val store: TripStore) {
 
-    fun getTrips(): List<Trip> {
-        return store.findAll()
+    fun fetchTrips(liveData: MutableLiveData<List<Trip>>) {
+        return store.fetchTripData(liveData)
     }
 
     fun addTrip(trip: Trip) {
@@ -20,7 +21,7 @@ class Repository(private val store: TripStore) {
         return store.delete(trip)
     }
 
-    fun removeSight(sight: Sight, trip: Trip) {
-        return store.removeSight(sight,trip)
+    fun removeSight(liveData: MutableLiveData<List<Sight>>, sight: Sight, trip: Trip) {
+        return store.removeSight(liveData, sight, trip)
     }
 }
