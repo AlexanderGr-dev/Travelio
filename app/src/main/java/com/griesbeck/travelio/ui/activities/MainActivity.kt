@@ -3,16 +3,28 @@ package com.griesbeck.travelio.ui.activities
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.firebase.ui.auth.AuthUI
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.navigation.NavigationView
 import com.griesbeck.travelio.R
 import com.griesbeck.travelio.databinding.ActivityMainBinding
+import com.griesbeck.travelio.models.User
+import com.griesbeck.travelio.ui.viewmodels.UsersViewModel
+import com.squareup.picasso.Picasso
 
 
 class MainActivity : AppCompatActivity() {
@@ -28,10 +40,6 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
-        binding.appBarMain.fab.setOnClickListener {
-            val tripIntent = Intent(this, TripActivity::class.java)
-            startActivity(tripIntent)
-        }
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_main)
@@ -39,12 +47,47 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_trips
+                R.id.nav_trips, R.id.nav_logout, R.id.nav_profile
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+        navView.menu.findItem(R.id.nav_logout).setOnMenuItemClickListener {
+            AuthUI.getInstance()
+                .signOut(this)
+                .addOnCompleteListener ( this, OnCompleteListener { task ->
+                    if(task.isSuccessful){
+                        Toast.makeText(this, "Logout successfull", Toast.LENGTH_LONG).show()
+                        val signInIntent = Intent(this, SignInActivity::class.java)
+                        signInIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                        startActivity(signInIntent)
+                    }else{
+                        Toast.makeText(this, "Logout failed. Try again later.", Toast.LENGTH_LONG).show()
+                    }
+                })
+            return@setOnMenuItemClickListener true
+        }
+
+        val usersViewModel =
+            ViewModelProvider(this).get(UsersViewModel::class.java)
+
+
+        usersViewModel.user.observe(this) { user ->
+            val header = navView.getHeaderView(0)
+            val navPhoto = header.findViewById<ImageView>(R.id.iv_nav_header_photo)
+            if(user.photo != "" && user.photo != null) {
+                Picasso.get()
+                    .load(user.photo.toUri())
+                    .into(navPhoto)
+            }
+            val navName = header.findViewById<TextView>(R.id.tv_nav_header_name)
+            navName.text = user.name
+            val navEmail = header.findViewById<TextView>(R.id.tv_nav_header_email)
+            navEmail.text = user.email
+        }
+
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -52,9 +95,12 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
+
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
+
+
 }
 
