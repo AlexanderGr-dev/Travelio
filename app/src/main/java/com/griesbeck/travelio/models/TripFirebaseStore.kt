@@ -1,6 +1,7 @@
 package com.griesbeck.travelio.models
 
 import androidx.lifecycle.MutableLiveData
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -11,7 +12,9 @@ import com.google.firebase.ktx.Firebase
 class TripFirebaseStore: TripStore {
 
     private val database = Firebase.database
-    private val dbRef = database.getReference("trips")
+    private val dbRef = database.getReference(
+        "users/${FirebaseAuth.getInstance().currentUser?.uid.
+        toString()}/trips")
 
 
     override fun fetchTripData(liveData: MutableLiveData<List<Trip>>) {
@@ -19,6 +22,7 @@ class TripFirebaseStore: TripStore {
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val trips: MutableList<Trip> = mutableListOf()
+
 
                 dataSnapshot.children.forEach { tripSnapshot ->
                     val trip = tripSnapshot.getValue<Trip>()
