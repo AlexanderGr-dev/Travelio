@@ -27,5 +27,9 @@
     <string name="tv_sights">Sights</string>
     <string name="title_activity_maps">MapsActivity</string>
     <string name="btn_add_sights">Add sights</string>
+    <string name="tv_profile_name">Name</string>
+    <string name="profile_name_hint">e.g. John Doe</string>
+    <string name="tv_profile_email">Email</string>
+    <string name="profile_email_hint">e.g. test@gmail.com</string>
 
 </resources>

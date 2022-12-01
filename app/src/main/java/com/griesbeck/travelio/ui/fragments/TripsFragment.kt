@@ -14,6 +14,7 @@ import com.griesbeck.travelio.ui.activities.TripDetailActivity
 import com.griesbeck.travelio.TripListener
 import com.griesbeck.travelio.databinding.FragmentTripsBinding
 import com.griesbeck.travelio.models.Trip
+import com.griesbeck.travelio.ui.activities.TripActivity
 import com.griesbeck.travelio.ui.viewmodels.TripsViewModel
 
 class TripsFragment : Fragment(), TripListener {
@@ -37,6 +38,11 @@ class TripsFragment : Fragment(), TripListener {
         _binding = FragmentTripsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        binding.fabAdd.setOnClickListener {
+            val tripIntent = Intent(view?.context, TripActivity::class.java)
+            startActivity(tripIntent)
+        }
+
 
         tripsViewModel.trips.observe(viewLifecycleOwner, Observer { trips ->
             binding.rvTrips.layoutManager = layoutManager
@@ -52,7 +58,7 @@ class TripsFragment : Fragment(), TripListener {
         val tripsViewModel = ViewModelProvider(this).get(TripsViewModel::class.java)
 
         tripsViewModel.trips.observe(viewLifecycleOwner, Observer { trips ->
-            binding.rvTrips.layoutManager = layoutManager
+            binding.rvTrips.layoutManager = GridLayoutManager(this.context,2)
             binding.rvTrips.adapter = TripAdapter(trips,this)
         })
     }
