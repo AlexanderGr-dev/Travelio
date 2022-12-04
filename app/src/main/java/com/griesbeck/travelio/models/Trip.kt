@@ -8,6 +8,8 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class Trip(@get: Exclude
                 var id: String = "",
+                var locLat: Double = 0.0,
+                var locLon: Double = 0.0,
                 var image: String = "",
                 var location: String = "",
                 var period: String = "",
