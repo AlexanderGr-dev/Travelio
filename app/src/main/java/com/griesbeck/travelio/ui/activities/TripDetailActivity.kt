@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,8 +13,12 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.griesbeck.travelio.R
 import com.griesbeck.travelio.ui.adapters.SightsDetailAdapter
 import com.griesbeck.travelio.databinding.ActivityTripDetailBinding
+import com.griesbeck.travelio.getResizedBitmap
 import com.griesbeck.travelio.models.Trip
+import com.griesbeck.travelio.stringToBitMap
+import com.griesbeck.travelio.ui.adapters.WeatherAdapter
 import com.griesbeck.travelio.ui.viewmodels.TripsViewModel
+import com.griesbeck.travelio.ui.viewmodels.WeatherViewModel
 import com.squareup.picasso.Picasso
 
 class TripDetailActivity : AppCompatActivity() {
@@ -30,9 +35,20 @@ class TripDetailActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbarTripDetail)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
+        val weatherViewModel =
+            ViewModelProvider(this).get(WeatherViewModel::class.java)
+
         if(intent.hasExtra("trip_detail")) {
             trip = intent.extras?.getParcelable("trip_detail")
             bindTripDetailData(trip)
+            weatherViewModel.getWeather(trip!!.locLat,trip!!.locLon)
+        }
+
+
+        weatherViewModel.weather.observe(this) { weather ->
+            val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+            binding.rvWeather.layoutManager = layoutManager
+            binding.rvWeather.adapter = WeatherAdapter(weather)
         }
 
     }
@@ -61,7 +77,12 @@ class TripDetailActivity : AppCompatActivity() {
     }
 
     private fun bindTripDetailData(trip: Trip?){
-        Picasso.get().load(trip?.image?.toUri()).into(binding.tripImage)
+        val ivBitmap = binding.tripImage.drawable.toBitmap()
+        val bitmapWidth = ivBitmap.width
+        val bitmapHeight = ivBitmap.height
+        val bitmap = trip?.image?.let { stringToBitMap(it) }
+        val resizedBitmap = bitmap?.let { getResizedBitmap(it,bitmapWidth,bitmapHeight) }
+        binding.tripImage.setImageBitmap(resizedBitmap)
         binding.tvDetailLocationContent.text = trip?.location
         binding.tvDetailDateContent.text = trip?.period
         binding.tvDetailCostsContent.text = trip?.costs
