@@ -20,7 +20,8 @@ class TripAdapter(private val trips: List<Trip>, private val listener: TripListe
     class ViewHolder(private val binding: CardTripBinding) : RecyclerView.ViewHolder(binding.root) {
 
             fun bind(trip: Trip, listener: TripListener) {
-                Picasso.get().load(trip.image.toUri()).into(binding.ivLocation)
+                //Picasso.get().load(trip.image.toUri()).into(binding.ivLocation)
+                binding.ivLocation.setImageBitmap(stringToBitMap(trip.image))
                 binding.locationTitle.text = trip.location
                 binding.tvTripPeriod.text = trip.period
                 binding.tripAccomodation.text = trip.accomodation

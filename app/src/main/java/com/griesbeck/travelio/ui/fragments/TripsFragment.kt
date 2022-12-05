@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import com.griesbeck.travelio.TripAdapter
 import com.griesbeck.travelio.ui.activities.TripDetailActivity
@@ -15,6 +16,8 @@ import com.griesbeck.travelio.TripListener
 import com.griesbeck.travelio.databinding.FragmentTripsBinding
 import com.griesbeck.travelio.models.Trip
 import com.griesbeck.travelio.ui.activities.TripActivity
+import com.griesbeck.travelio.ui.viewmodels.SharedTripViewModel
+import com.griesbeck.travelio.ui.viewmodels.SharedTripViewModelFactory
 import com.griesbeck.travelio.ui.viewmodels.TripsViewModel
 
 class TripsFragment : Fragment(), TripListener {
@@ -70,8 +73,11 @@ class TripsFragment : Fragment(), TripListener {
     }
 
     override fun onTripClick(trip: Trip) {
+        val tripViewModel = ViewModelProvider(this, SharedTripViewModelFactory.getInstance()).get(
+            SharedTripViewModel::class.java)
         val tripDetailIntent = Intent(this.context, TripDetailActivity::class.java)
-        tripDetailIntent.putExtra("trip_detail",trip)
+        tripViewModel.setSelectedTrip(trip)
+        //tripDetailIntent.putExtra("trip_detail",trip)
         startActivity(tripDetailIntent)
     }
 

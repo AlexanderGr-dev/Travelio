@@ -8,10 +8,13 @@ import com.griesbeck.travelio.models.*
 class TripsViewModel: ViewModel() {
 
     private val repo : Repository = Repository(TripFirebaseStore())
+
     private val _trips = MutableLiveData<List<Trip>>()
     val trips: LiveData<List<Trip>> get() = _trips
+
     private val _sights = MutableLiveData<List<Sight>>()
     val sights: LiveData<List<Sight>> get() = _sights
+
 
     init{
         fetchTrips(_trips)
@@ -42,7 +45,6 @@ class TripsViewModel: ViewModel() {
     fun getSights(trip: Trip) {
         _sights.value = trip.sights
     }
-
 
 
 }

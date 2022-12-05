@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.core.graphics.drawable.toBitmap
-import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -17,9 +16,10 @@ import com.griesbeck.travelio.getResizedBitmap
 import com.griesbeck.travelio.models.Trip
 import com.griesbeck.travelio.stringToBitMap
 import com.griesbeck.travelio.ui.adapters.WeatherAdapter
+import com.griesbeck.travelio.ui.viewmodels.SharedTripViewModel
+import com.griesbeck.travelio.ui.viewmodels.SharedTripViewModelFactory
 import com.griesbeck.travelio.ui.viewmodels.TripsViewModel
 import com.griesbeck.travelio.ui.viewmodels.WeatherViewModel
-import com.squareup.picasso.Picasso
 
 class TripDetailActivity : AppCompatActivity() {
 
@@ -37,11 +37,19 @@ class TripDetailActivity : AppCompatActivity() {
 
         val weatherViewModel =
             ViewModelProvider(this).get(WeatherViewModel::class.java)
+        val tripViewModel = ViewModelProvider(this, SharedTripViewModelFactory.getInstance()).get(
+            SharedTripViewModel::class.java)
 
-        if(intent.hasExtra("trip_detail")) {
+        /*if(intent.hasExtra("trip_detail")) {
             trip = intent.extras?.getParcelable("trip_detail")
             bindTripDetailData(trip)
             weatherViewModel.getWeather(trip!!.locLat,trip!!.locLon)
+        }
+*/
+
+        tripViewModel.selectedTrip.observe(this) { trip ->
+            bindTripDetailData(trip)
+            weatherViewModel.getWeather(trip.locLat,trip.locLon)
         }
 
 
@@ -66,7 +74,7 @@ class TripDetailActivity : AppCompatActivity() {
             }
             R.id.item_edit -> {
                 val tripDetailIntent = Intent(this, TripActivity::class.java)
-                tripDetailIntent.putExtra("trip_edit",trip)
+                tripDetailIntent.putExtra("trip_edit",true)
                 startActivity(tripDetailIntent)
             }
             R.id.item_delete -> {
@@ -77,6 +85,15 @@ class TripDetailActivity : AppCompatActivity() {
     }
 
     private fun bindTripDetailData(trip: Trip?){
+        if (trip != null) {
+            this.trip?.image = trip.image
+            this.trip?.id = trip.id
+            this.trip?.location = trip.location
+            this.trip?.period = trip.period
+            this.trip?.accomodation = trip.accomodation
+            this.trip?.locLon = trip.locLon
+            this.trip?.locLat = trip.locLat
+        }
         val ivBitmap = binding.tripImage.drawable.toBitmap()
         val bitmapWidth = ivBitmap.width
         val bitmapHeight = ivBitmap.height

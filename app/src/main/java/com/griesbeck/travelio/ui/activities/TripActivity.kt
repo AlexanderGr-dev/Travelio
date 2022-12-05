@@ -1,28 +1,42 @@
 package com.griesbeck.travelio.ui.activities
 
 
+import android.content.ContentValues
 import android.content.Intent
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.net.toUri
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.griesbeck.travelio.databinding.ActivityTripBinding
 import androidx.core.util.Pair
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.Status
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.net.FetchPhotoRequest
+import com.google.android.libraries.places.api.net.FetchPhotoResponse
+import com.google.android.libraries.places.api.net.PlacesClient
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.griesbeck.travelio.*
 import com.griesbeck.travelio.models.Sight
 import com.griesbeck.travelio.models.Trip
+import com.griesbeck.travelio.ui.viewmodels.SharedTripViewModel
+import com.griesbeck.travelio.ui.viewmodels.SharedTripViewModelFactory
 import com.griesbeck.travelio.ui.viewmodels.TripsViewModel
 import com.squareup.picasso.Picasso
+import java.math.RoundingMode
 import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class TripActivity : AppCompatActivity(), SightDeleteListener {
 
@@ -45,15 +59,19 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
         val tripsViewModel =
             ViewModelProvider(this).get(TripsViewModel::class.java)
 
+        val tripViewModel = ViewModelProvider(this, SharedTripViewModelFactory.getInstance()).get(
+            SharedTripViewModel::class.java)
+
         if(intent.hasExtra("trip_edit")){
             edit = true
             binding.btnAdd.text = getString(R.string.btn_save_trip)
-            if(trip.image.toUri() != Uri.EMPTY) {
-                binding.btnChooseImage.text = getString(R.string.btn_change_image)
+            //trip = intent.extras?.getParcelable("trip_edit")!!
+            tripViewModel.selectedTrip.observe(this) { trip ->
+                bindTripEditData(trip)
             }
-            trip = intent.extras?.getParcelable("trip_edit")!!
-            bindTripEditData(trip)
         }
+
+        initializePlacesAutocompleteFragment()
 
 
         binding.etDate.setOnClickListener {
@@ -66,18 +84,20 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
                 tripsViewModel.addTrip(trip)
                 finish()
             }else{
+                val temp = trip
                 tripsViewModel.updateTrip(trip)
+                tripViewModel.setSelectedTrip(trip)
                 val tripDetailIntent = Intent(this, TripDetailActivity::class.java)
-                tripDetailIntent.putExtra("trip_detail",trip)
+                //tripDetailIntent.putExtra("trip_detail",trip)
                 startActivity(tripDetailIntent)
             }
         }
 
-        binding.btnChooseImage.setOnClickListener {
+        /*binding.btnChooseImage.setOnClickListener {
           showImagePicker(imageIntentLauncher,this)
-        }
+        }*/
 
-        registerImagePickerCallback()
+        //registerImagePickerCallback()
 
         binding.btnAddSights.setOnClickListener {
             val mapsIntent = Intent(this, MapsActivity::class.java)
@@ -149,7 +169,15 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
         val tripsViewModel =
             ViewModelProvider(this).get(TripsViewModel::class.java)
 
-        Picasso.get().load(trip.image.toUri()).into(binding.ivTripImageChoose)
+        this.trip.id = trip.id
+        this.trip.image = trip.image
+        this.trip.location = trip.location
+        this.trip.period = trip.period
+        this.trip.accomodation = trip.accomodation
+        this.trip.locLon = trip.locLon
+        this.trip.locLat = trip.locLat
+
+        binding.ivTripImageChoose.setImageBitmap(stringToBitMap(trip.image))
         binding.etLocation.setText(trip.location)
         binding.etDate.setText(trip.period)
         binding.etAccomodation.setText(trip.accomodation)
@@ -180,7 +208,7 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
                             Picasso.get()
                                 .load(trip.image)
                                 .into(binding.ivTripImageChoose)
-                            binding.btnChooseImage.text = getString(R.string.btn_change_image)
+//                            binding.btnChooseImage.text = getString(R.string.btn_change_image)
                         }
                     }
                     RESULT_CANCELED -> {
@@ -249,5 +277,62 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
             dialog.dismiss()
         }
         builder.show()
+    }
+
+    private fun initializePlacesAutocompleteFragment(){
+        if (!Places.isInitialized()) {
+            Places.initialize(this, BuildConfig.MAPS_API_KEY, Locale.US)
+        }
+
+        // Initialize the AutocompleteSupportFragment.
+        val autocompleteFragment =
+            supportFragmentManager.findFragmentById(R.id.places_autocomplete_fragment)
+                    as AutocompleteSupportFragment
+
+        // Specify the types of place data to return.
+        autocompleteFragment.setPlaceFields(listOf(Place.Field.PHOTO_METADATAS, Place.Field.NAME, Place.Field.LAT_LNG))
+
+        autocompleteFragment.view?.setBackgroundColor(getColor(R.color.inputbox_bg))
+
+        autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
+            override fun onPlaceSelected(place: Place) {
+                val placesClient: PlacesClient = Places.createClient(this@TripActivity)
+                val loc = place.latLng
+                if (loc != null) {
+                    trip.locLat = loc.latitude.toBigDecimal().setScale(4,RoundingMode.HALF_DOWN).toDouble()
+                    trip.locLon = loc.longitude.toBigDecimal().setScale(4,RoundingMode.HALF_DOWN).toDouble()
+                }
+                trip.location = place.name as String
+
+                val metada = place.photoMetadatas
+                if (metada == null || metada.isEmpty()) {
+                    return
+                }
+                val photoMetadata = metada.first()
+
+                // Create a FetchPhotoRequest.
+                val photoRequest = FetchPhotoRequest.builder(photoMetadata)
+                    .setMaxWidth(500)
+                    .setMaxHeight(300)
+                    .build()
+                placesClient.fetchPhoto(photoRequest)
+                    .addOnSuccessListener { fetchPhotoResponse: FetchPhotoResponse ->
+                        val bitmap = fetchPhotoResponse.bitmap
+                        binding.ivTripImageChoose.setImageBitmap(bitmap)
+                        binding.etLocation.setText(place.name)
+                        trip.image = bitMapToString(bitmap)
+                    }.addOnFailureListener { exception: Exception ->
+                        if (exception is ApiException) {
+                            val statusCode = exception.statusCode
+                            TODO("Handle error with given status code.")
+                        }
+                    }
+
+            }
+
+            override fun onError(status: Status) {
+                Log.i(ContentValues.TAG, "An error occurred: $status")
+            }
+        })
     }
 }
