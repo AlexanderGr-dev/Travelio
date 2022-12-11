@@ -8,13 +8,13 @@
 
     <fragment
         android:id="@+id/nav_trips"
-        android:name="com.griesbeck.travelio.ui.fragments.TripsFragment"
+        android:name="com.griesbeck.travelio.ui.trips.fragments.TripsFragment"
         android:label="@string/menu_trips"
         tools:layout="@layout/fragment_trips" />
 
     <fragment
         android:id="@+id/nav_profile"
-        android:name="com.griesbeck.travelio.ui.fragments.ProfileFragment"
+        android:name="com.griesbeck.travelio.ui.users.fragments.ProfileFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_profile" />
 

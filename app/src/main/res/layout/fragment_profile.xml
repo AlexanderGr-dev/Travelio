@@ -37,14 +37,14 @@
             </androidx.cardview.widget.CardView>
 
             <com.google.android.material.button.MaterialButton
-                style="@style/Widget.Material3.Button.ElevatedButton.Icon"
+                style="@style/Widget.Material3.Button.ElevatedButton"
                 android:id="@+id/btn_change_profile_picture"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/secondary"
                 android:layout_marginTop="10dp"
                 android:textColor="@color/white"
-                android:text="Choose Profile Picture"
+                android:text="@string/btn_choose_profile_pic_text"
                 android:textAlignment="center"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -105,26 +105,27 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
-                style="@style/Widget.Material3.Button.ElevatedButton.Icon"
+                style="@style/Widget.Material3.Button.ElevatedButton"
                 android:id="@+id/btn_update_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/secondary"
                 android:layout_marginTop="10dp"
                 android:textColor="@color/white"
-                android:text="Update"
+                android:gravity="center"
+                android:text="@string/btn_update_profile_text"
                 android:textAlignment="center"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_delete_account"
-                style="@style/Widget.Material3.Button.ElevatedButton.Icon"
+                style="@style/Widget.Material3.Button.ElevatedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:backgroundTint="@color/secondary"
-                android:text="Delete Account"
+                android:text="@string/btn_delete_profile_text"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="18sp"

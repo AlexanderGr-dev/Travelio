@@ -9,7 +9,9 @@
     <color name="white">#FFFFFFFF</color>
     <color name="primary">#6750A4</color>
     <color name="secondary">#625B71</color>
+    <color name="primary_opacity">#A5AEB0B2</color>
     <color name="primary_container">#EADDFF</color>
     <color name="secondary_container">#E8DEF8</color>
+    <color name="inputbox_bg">#E7E0EC</color>
     <color name="transparent">#00000000</color>
 </resources>

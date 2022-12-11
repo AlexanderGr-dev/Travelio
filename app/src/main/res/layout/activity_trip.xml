@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context=".ui.activities.TripActivity">
+    tools:context=".ui.trips.activities.TripActivity">
 
 
     <androidx.appcompat.widget.Toolbar
@@ -26,7 +26,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/tv_image"
@@ -51,13 +51,23 @@
                 android:scaleType="fitXY"
                 android:background="@drawable/round_image_bg"
                 android:clipToOutline="true"
-                app:layout_constraintHorizontal_bias="0.05"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_image"
                 app:srcCompat="@drawable/placeholder" />
 
-            <com.google.android.material.button.MaterialButton
+            <fragment android:id="@+id/places_autocomplete_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+                android:layout_margin="10dp"
+                android:padding="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_trip_image_choose"
+                />
+
+            <!--<com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_choose_image"
                 style="@style/Widget.Material3.Button.ElevatedButton.Icon"
                 android:layout_width="119dp"
@@ -72,7 +82,7 @@
                 app:layout_constraintHorizontal_bias="0.421"
                 app:layout_constraintLeft_toRightOf="@id/iv_trip_image_choose"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_image" />
+                app:layout_constraintTop_toBottomOf="@id/tv_image" />-->
 
             <TextView
                 android:id="@+id/tv_location"
@@ -85,7 +95,7 @@
                 android:paddingStart="10dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/iv_trip_image_choose"/>
+                app:layout_constraintTop_toBottomOf="@id/places_autocomplete_fragment"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tf_location"
