@@ -29,34 +29,40 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/berg" />
 
-
-    <TextView
-        android:id="@+id/tv_detail_location_content"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/trip_image"
-        android:layout_alignTop="@+id/trip_image"
-        android:layout_alignEnd="@+id/trip_image"
-        android:layout_alignBottom="@+id/trip_image"
-        android:paddingStart="10dp"
-        android:gravity="center_vertical"
-        android:text="Location_Name"
-        android:textColor="@color/white"
-        android:textSize="22sp"
-        android:textStyle="bold" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_detail_date_content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_detail_location_content"
-        android:layout_marginTop="-100dp"
-        android:paddingStart="10dp"
-        android:gravity="center_vertical"
-        android:text="17/08/22  -  18/08/22"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        />
+        <TextView
+            android:id="@+id/tv_detail_location_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="88dp"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="Location_Name"
+            android:background="@drawable/round_textview_bg"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_detail_date_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/round_textview_bg"
+            android:gravity="center"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:text="17/08/2022 - 18/08/2022"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+    </LinearLayout>
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

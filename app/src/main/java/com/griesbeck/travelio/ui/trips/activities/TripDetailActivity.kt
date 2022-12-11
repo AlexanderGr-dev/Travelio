@@ -103,7 +103,7 @@ class TripDetailActivity : AppCompatActivity() {
         binding.tripImage.setImageBitmap(resizedBitmap)
         binding.tvDetailLocationContent.text = trip?.location
         binding.tvDetailDateContent.text = trip?.period
-        binding.tvDetailCostsContent.text = trip?.costs
+        binding.tvDetailCostsContent.text = trip?.costs + " €"
         binding.tvDetailAccomodationContent.text = trip?.accomodation
         binding.rvSightsDetail.layoutManager = layoutManager
         binding.rvSightsDetail.adapter = SightsDetailAdapter(trip!!.sights)
