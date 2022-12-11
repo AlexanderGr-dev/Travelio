@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.lifecycle.MutableLiveData
+import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.database.DataSnapshot
@@ -26,9 +27,14 @@ class UserFirebaseStore: UserStore {
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val currentUserId = FirebaseAuth.getInstance().currentUser?.uid.toString()
-                val actualUser = dataSnapshot.child(currentUserId).child("user_data").getValue<User>()
-                liveData.postValue(actualUser)
-                Log.i("i",liveData.value.toString())
+
+                    val actualUser =
+                        dataSnapshot.child(currentUserId).child("user_data").getValue<User>()
+                if(actualUser != null) {
+                    liveData.postValue(actualUser)
+                    Log.i("i", liveData.value.toString())
+                }
+
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -59,8 +65,12 @@ class UserFirebaseStore: UserStore {
         }
         val firebaseUser = FirebaseAuth.getInstance().currentUser
 
-        firebaseUser?.delete()?.addOnCompleteListener {
-            Toast.makeText(context, "Account was deleted successfully.", Toast.LENGTH_LONG).show()
+        AuthUI.getInstance().delete(context).addOnCompleteListener {
+
         }
+
+        /*firebaseUser?.delete()?.addOnCompleteListener {
+            Toast.makeText(context, "Account was deleted successfully.", Toast.LENGTH_LONG).show()
+        }*/
     }
 }

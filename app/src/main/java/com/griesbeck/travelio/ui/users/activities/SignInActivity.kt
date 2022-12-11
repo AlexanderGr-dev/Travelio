@@ -3,6 +3,7 @@ package com.griesbeck.travelio.ui.users.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
@@ -31,7 +32,6 @@ class SignInActivity : AppCompatActivity() {
     }
 
     private fun createSignInIntent() {
-        // [START auth_fui_create_intent]
         // Choose authentication providers
         val providers = arrayListOf(
             AuthUI.IdpConfig.EmailBuilder().build(),
@@ -46,10 +46,8 @@ class SignInActivity : AppCompatActivity() {
             .setTheme(R.style.LoginTheme)
             .build()
         signInLauncher.launch(signInIntent)
-        // [END auth_fui_create_intent]
     }
 
-    // [START auth_fui_result]
     private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
 
         if (result.resultCode == RESULT_OK) {
@@ -72,17 +70,12 @@ class SignInActivity : AppCompatActivity() {
             // sign-in flow using the back button. Otherwise check
             // response.getError().getErrorCode() and handle the error.
             // ...
+            if(result.idpResponse == null){
+                Toast.makeText(this, "SignIn canceled", Toast.LENGTH_SHORT).show()
+            }else{
+                result.idpResponse!!.error?.let { Toast.makeText(this, it.errorCode, Toast.LENGTH_SHORT).show() }
+            }
         }
     }
 
-
-    private fun delete() {
-        // [START auth_fui_delete]
-        AuthUI.getInstance()
-            .delete(this)
-            .addOnCompleteListener {
-                // ...
-            }
-        // [END auth_fui_delete]
-    }
 }

@@ -13,10 +13,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.griesbeck.travelio.databinding.FragmentProfileBinding
+import com.griesbeck.travelio.models.trips.Sight
 import com.griesbeck.travelio.models.users.User
 import com.griesbeck.travelio.showImagePicker
+import com.griesbeck.travelio.ui.trips.viewmodels.TripsViewModel
 import com.griesbeck.travelio.ui.users.activities.SignInActivity
 import com.griesbeck.travelio.ui.users.viewmodels.UsersViewModel
 import com.squareup.picasso.Picasso
@@ -27,6 +30,7 @@ class ProfileFragment: Fragment() {
     private lateinit var imageIntentLauncher : ActivityResultLauncher<Intent>
     private val binding get() = _binding!!
     private var user: User = User()
+    private lateinit var usersViewModel: UsersViewModel
 
 
     override fun onCreateView(
@@ -35,7 +39,7 @@ class ProfileFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        val usersViewModel =
+        usersViewModel =
             ViewModelProvider(requireActivity()).get(UsersViewModel::class.java)
 
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
@@ -65,10 +69,7 @@ class ProfileFragment: Fragment() {
         }
 
         binding.btnDeleteAccount.setOnClickListener {
-            view?.let { view -> usersViewModel.deleteCurrentUser(view.context,user) }
-            val signInIntent = Intent(view?.context, SignInActivity::class.java)
-            signInIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            startActivity(signInIntent)
+            deleteProfileDialog()
         }
 
 
@@ -91,6 +92,22 @@ class ProfileFragment: Fragment() {
         }
     }
 
+    private fun deleteProfileDialog() {
+        val builder = MaterialAlertDialogBuilder(requireView().context)
+        builder.setTitle("Delete Account")
+        builder.setMessage("Do you really want to delete your Account? All trips will be lost.")
+        builder.setNeutralButton("Cancel") { dialog, which ->
+            dialog.dismiss()
+        }
+        builder.setPositiveButton("Delete") { dialog, which ->
+            usersViewModel.deleteCurrentUser(requireView().context,user)
+        val signInIntent = Intent(view?.context, SignInActivity::class.java)
+        signInIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        startActivity(signInIntent)
+        }
+        builder.show()
+    }
+
     private fun registerImagePickerCallback() {
         imageIntentLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult())
@@ -108,7 +125,7 @@ class ProfileFragment: Fragment() {
                             user.photo = photo.toString()
 
                             Picasso.get()
-                                .load(user.photo)
+                                .load(user.photo.toUri())
                                 .into(binding.ivProfilePicture)
                         }
                     }
