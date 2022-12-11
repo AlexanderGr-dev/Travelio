@@ -1,22 +1,23 @@
-package com.griesbeck.travelio.ui.trips
+package com.griesbeck.travelio.ui.trips.fragments
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.griesbeck.travelio.TripActivity
 import com.griesbeck.travelio.TripAdapter
-import com.griesbeck.travelio.TripDetailActivity
+import com.griesbeck.travelio.ui.trips.activities.TripDetailActivity
 import com.griesbeck.travelio.TripListener
 import com.griesbeck.travelio.databinding.FragmentTripsBinding
-import com.griesbeck.travelio.models.Trip
+import com.griesbeck.travelio.models.trips.Trip
+import com.griesbeck.travelio.ui.trips.activities.TripActivity
+import com.griesbeck.travelio.ui.viewmodels.SharedTripViewModel
+import com.griesbeck.travelio.ui.viewmodels.SharedTripViewModelFactory
+import com.griesbeck.travelio.ui.trips.viewmodels.TripsViewModel
 
 class TripsFragment : Fragment(), TripListener {
 
@@ -39,6 +40,11 @@ class TripsFragment : Fragment(), TripListener {
         _binding = FragmentTripsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        binding.fabAdd.setOnClickListener {
+            val tripIntent = Intent(view?.context, TripActivity::class.java)
+            startActivity(tripIntent)
+        }
+
 
         tripsViewModel.trips.observe(viewLifecycleOwner, Observer { trips ->
             binding.rvTrips.layoutManager = layoutManager
@@ -54,7 +60,7 @@ class TripsFragment : Fragment(), TripListener {
         val tripsViewModel = ViewModelProvider(this).get(TripsViewModel::class.java)
 
         tripsViewModel.trips.observe(viewLifecycleOwner, Observer { trips ->
-            binding.rvTrips.layoutManager = layoutManager
+            binding.rvTrips.layoutManager = GridLayoutManager(this.context,2)
             binding.rvTrips.adapter = TripAdapter(trips,this)
         })
     }
@@ -66,8 +72,11 @@ class TripsFragment : Fragment(), TripListener {
     }
 
     override fun onTripClick(trip: Trip) {
+        val tripViewModel = ViewModelProvider(this, SharedTripViewModelFactory.getInstance()).get(
+            SharedTripViewModel::class.java)
         val tripDetailIntent = Intent(this.context, TripDetailActivity::class.java)
-        tripDetailIntent.putExtra("trip_detail",trip)
+        tripViewModel.setSelectedTrip(trip)
+        //tripDetailIntent.putExtra("trip_detail",trip)
         startActivity(tripDetailIntent)
     }
 
