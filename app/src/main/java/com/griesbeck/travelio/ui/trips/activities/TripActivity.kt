@@ -84,20 +84,13 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
                 tripsViewModel.addTrip(trip)
                 finish()
             }else{
-                val temp = trip
                 tripsViewModel.updateTrip(trip)
                 tripViewModel.setSelectedTrip(trip)
                 val tripDetailIntent = Intent(this, TripDetailActivity::class.java)
-                //tripDetailIntent.putExtra("trip_detail",trip)
                 startActivity(tripDetailIntent)
             }
         }
 
-        /*binding.btnChooseImage.setOnClickListener {
-          showImagePicker(imageIntentLauncher,this)
-        }*/
-
-        //registerImagePickerCallback()
 
         binding.btnAddSights.setOnClickListener {
             val mapsIntent = Intent(this, MapsActivity::class.java)
@@ -109,16 +102,6 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
 
     }
 
- /*   override fun onResume() {
-        super.onResume()
-
-        val tripsViewModel = ViewModelProvider(this).get(TripsViewModel::class.java)
-
-        tripsViewModel.trips.observe(viewLifecycleOwner, Observer { trips ->
-            binding.rvSights.layoutManager = layoutManager
-            binding.rvSights.adapter = SightsAdapter(trips)
-        })
-    }*/
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_trip_add, menu)
@@ -153,7 +136,7 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
             val formatter = SimpleDateFormat("dd/MM/yyyy")
             val startdate: String = formatter.format(it.first)
             val endDate: String = formatter.format(it.second)
-            val period = "${startdate}   -   ${endDate}"
+            val period = "${startdate} - ${endDate}"
             binding.etDate.setText(period)
         }
     }
@@ -188,37 +171,6 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
             binding.rvSights.layoutManager = layoutManager
             binding.rvSights.adapter = SightsAdapter(sights, this)
         }
-    }
-
-    private fun registerImagePickerCallback() {
-        imageIntentLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult())
-            { result ->
-                when (result.resultCode) {
-                    RESULT_OK -> {
-                        if (result.data != null) {
-
-                            val image = result.data!!.data!!
-                            contentResolver.takePersistableUriPermission(
-                                image,
-                                Intent.FLAG_GRANT_READ_URI_PERMISSION
-                            )
-                            trip.image = image.toString()
-
-                            Picasso.get()
-                                .load(trip.image)
-                                .into(binding.ivTripImageChoose)
-//                            binding.btnChooseImage.text = getString(R.string.btn_change_image)
-                        }
-                    }
-                    RESULT_CANCELED -> {
-                        Toast.makeText(this, "Task cancelled", Toast.LENGTH_SHORT).show()
-                    }
-                    else -> {
-                        Toast.makeText(this, "Some error occured", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
     }
 
     private fun registerMapCallback() {

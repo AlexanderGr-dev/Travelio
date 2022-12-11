@@ -71,17 +71,19 @@ class MainActivity : AppCompatActivity() {
 
 
         usersViewModel.user.observe(this) { user ->
-            val header = navView.getHeaderView(0)
-            val navPhoto = header.findViewById<ImageView>(R.id.iv_nav_header_photo)
-            if(user.photo != "" && user.photo != null) {
-                Picasso.get()
-                    .load(user.photo.toUri())
-                    .into(navPhoto)
+            if(user != null) {
+                val header = navView.getHeaderView(0)
+                val navPhoto = header.findViewById<ImageView>(R.id.iv_nav_header_photo)
+                if (user.photo != "" && user.photo != null) {
+                    Picasso.get()
+                        .load(user.photo.toUri())
+                        .into(navPhoto)
+                }
+                val navName = header.findViewById<TextView>(R.id.tv_nav_header_name)
+                navName.text = user.name
+                val navEmail = header.findViewById<TextView>(R.id.tv_nav_header_email)
+                navEmail.text = user.email
             }
-            val navName = header.findViewById<TextView>(R.id.tv_nav_header_name)
-            navName.text = user.name
-            val navEmail = header.findViewById<TextView>(R.id.tv_nav_header_email)
-            navEmail.text = user.email
         }
 
     }

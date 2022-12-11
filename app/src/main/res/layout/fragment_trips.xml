@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <com.google.android.material.button.MaterialButtonToggleGroup
+        <!--<com.google.android.material.button.MaterialButtonToggleGroup
             android:id="@+id/toggleButton"
             android:gravity="center"
             android:layout_marginTop="10dp"
@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:text="Past"
                 />
-        </com.google.android.material.button.MaterialButtonToggleGroup>
+        </com.google.android.material.button.MaterialButtonToggleGroup>-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_trips"
