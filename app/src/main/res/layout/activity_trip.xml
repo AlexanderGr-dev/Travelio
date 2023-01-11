@@ -113,6 +113,9 @@
                     android:id="@+id/et_location"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:maxLength="20"
+                    android:maxLines="1"
                     />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -156,7 +159,7 @@
                 android:id="@+id/tv_accomodation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/tv_accomodation"
+                android:text="@string/tv_accommodation"
                 android:textColor="@color/primary"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -170,7 +173,7 @@
                 style="?attr/textInputFilledStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/hint_accomodation_name"
+                android:hint="@string/hint_accommodation_name"
                 android:padding="10dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -181,6 +184,9 @@
                     android:id="@+id/et_accomodation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:maxLength="20"
+                    android:maxLines="1"
                     />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -214,6 +220,9 @@
                     android:id="@+id/et_costs"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:maxLength="10"
+                    android:maxLines="1"
                     />
             </com.google.android.material.textfield.TextInputLayout>
             
@@ -264,18 +273,20 @@
 
 
             <com.google.android.material.button.MaterialButton
-                style="@style/Widget.Material3.Button.ElevatedButton.Icon"
+                style="@style/Widget.Material3.Button.ElevatedButton"
                 android:id="@+id/btn_add"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/secondary"
                 android:textColor="@color/white"
+                android:padding="5dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"
                 android:text="@string/btn_add_trip"
                 android:textAlignment="center"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                app:icon="@drawable/ic_baseline_add_24"
-                app:iconTint="@color/white"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/btn_add_sights"/>

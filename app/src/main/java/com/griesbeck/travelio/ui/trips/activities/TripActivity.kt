@@ -3,6 +3,7 @@ package com.griesbeck.travelio.ui.trips.activities
 
 import android.content.ContentValues
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -79,7 +80,11 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
         }
 
         binding.btnAdd.setOnClickListener {
-            addTripData()
+            if(isUserInputCorrect()) {
+                addTripData()
+            }else{
+                return@setOnClickListener
+            }
             if(!edit) {
                 tripsViewModel.addTrip(trip)
                 finish()
@@ -133,7 +138,7 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
 
         dateRangePicker.addOnPositiveButtonClickListener {
 
-            val formatter = SimpleDateFormat("dd/MM/yyyy")
+            val formatter = SimpleDateFormat("yyyy/MM/dd")
             val startdate: String = formatter.format(it.first)
             val endDate: String = formatter.format(it.second)
             val period = "${startdate} - ${endDate}"
@@ -171,6 +176,29 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
             binding.rvSights.layoutManager = layoutManager
             binding.rvSights.adapter = SightsAdapter(sights, this)
         }
+    }
+
+    private fun isUserInputCorrect(): Boolean{
+        var correctInput = true
+
+        if(binding.etLocation.text!!.isEmpty()){
+            binding.etLocation.error = "Trip name must not empty."
+            correctInput = false
+        }
+        if(binding.etDate.text!!.isEmpty()){
+            binding.etDate.error = "Date must not empty."
+            correctInput = false
+        }
+        if(binding.etAccomodation.text!!.isEmpty()){
+            binding.etAccomodation.error = "Accomodation name must not empty."
+            correctInput = false
+        }
+        if(binding.etCosts.text!!.isEmpty()){
+            binding.etCosts.error = "Costs must not empty."
+            correctInput = false
+        }
+
+        return correctInput
     }
 
     private fun registerMapCallback() {
@@ -216,7 +244,7 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
 
     private fun deleteSightDialog(sight: Sight) {
         val builder = MaterialAlertDialogBuilder(this)
-        builder.setTitle("Delete")
+        builder.setTitle("Delete Sight")
         builder.setMessage("Do you really want to delete this sight?")
         builder.setNeutralButton("Cancel") { dialog, which ->
             dialog.dismiss()
