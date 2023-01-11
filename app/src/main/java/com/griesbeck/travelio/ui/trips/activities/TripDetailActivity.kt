@@ -26,7 +26,7 @@ class TripDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTripDetailBinding
     private val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-    private var trip: Trip? = null
+    var trip = Trip()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,20 +87,24 @@ class TripDetailActivity : AppCompatActivity() {
 
     private fun bindTripDetailData(trip: Trip?){
         if (trip != null) {
-            this.trip?.image = trip.image
-            this.trip?.id = trip.id
-            this.trip?.location = trip.location
-            this.trip?.period = trip.period
-            this.trip?.accomodation = trip.accomodation
-            this.trip?.locLon = trip.locLon
-            this.trip?.locLat = trip.locLat
+            this.trip.image = trip.image
+            this.trip.id = trip.id
+            this.trip.location = trip.location
+            this.trip.period = trip.period
+            this.trip.accomodation = trip.accomodation
+            this.trip.locLon = trip.locLon
+            this.trip.locLat = trip.locLat
         }
         val ivBitmap = binding.tripImage.drawable.toBitmap()
         val bitmapWidth = ivBitmap.width
         val bitmapHeight = ivBitmap.height
         val bitmap = trip?.image?.let { stringToBitMap(it) }
         val resizedBitmap = bitmap?.let { getResizedBitmap(it,bitmapWidth,bitmapHeight) }
-        binding.tripImage.setImageBitmap(resizedBitmap)
+        if(resizedBitmap != null) {
+            binding.tripImage.setImageBitmap(resizedBitmap)
+        }else{
+            binding.tripImage.setImageResource(R.drawable.placeholder)
+        }
         binding.tvDetailLocationContent.text = trip?.location
         binding.tvDetailDateContent.text = trip?.period
         binding.tvDetailCostsContent.text = trip?.costs + " €"
@@ -111,7 +115,7 @@ class TripDetailActivity : AppCompatActivity() {
 
     private fun deleteDialog() {
         val builder = MaterialAlertDialogBuilder(this)
-        builder.setTitle("Delete")
+        builder.setTitle("Delete Trip")
         builder.setMessage("Do you really want to delete this trip?")
         builder.setNeutralButton("Cancel") { dialog, which ->
             dialog.dismiss()
@@ -119,7 +123,8 @@ class TripDetailActivity : AppCompatActivity() {
         builder.setPositiveButton("Delete") { dialog, which ->
             val tripsViewModel =
                 ViewModelProvider(this).get(TripsViewModel::class.java)
-            trip?.let { tripsViewModel.deleteTrip(it) }
+            //trip?.let { tripsViewModel.deleteTrip(it) }
+            tripsViewModel.deleteTrip(this.trip)
             dialog.dismiss()
             val mainView = Intent(this, MainActivity::class.java)
             startActivity(mainView)
