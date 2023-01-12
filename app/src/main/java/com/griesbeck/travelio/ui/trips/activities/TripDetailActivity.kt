@@ -90,8 +90,9 @@ class TripDetailActivity : AppCompatActivity() {
             this.trip.image = trip.image
             this.trip.id = trip.id
             this.trip.location = trip.location
-            this.trip.period = trip.period
-            this.trip.accomodation = trip.accomodation
+            this.trip.startDate = trip.startDate
+            this.trip.endDate = trip.endDate
+            this.trip.accommodation = trip.accommodation
             this.trip.locLon = trip.locLon
             this.trip.locLat = trip.locLat
         }
@@ -105,10 +106,12 @@ class TripDetailActivity : AppCompatActivity() {
         }else{
             binding.tripImage.setImageResource(R.drawable.placeholder)
         }
+        val period = "${trip?.startDate} - ${trip?.endDate}"
+        val costs = trip?.costs + " €"
         binding.tvDetailLocationContent.text = trip?.location
-        binding.tvDetailDateContent.text = trip?.period
-        binding.tvDetailCostsContent.text = trip?.costs + " €"
-        binding.tvDetailAccomodationContent.text = trip?.accomodation
+        binding.tvDetailDateContent.text = period
+        binding.tvDetailCostsContent.text = costs
+        binding.tvDetailAccomodationContent.text = trip?.accommodation
         binding.rvSightsDetail.layoutManager = layoutManager
         binding.rvSightsDetail.adapter = SightsDetailAdapter(trip!!.sights)
     }

@@ -3,13 +3,11 @@ package com.griesbeck.travelio.ui.trips.activities
 
 import android.content.ContentValues
 import android.content.Intent
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -33,7 +31,6 @@ import com.griesbeck.travelio.models.trips.Trip
 import com.griesbeck.travelio.ui.viewmodels.SharedTripViewModel
 import com.griesbeck.travelio.ui.viewmodels.SharedTripViewModelFactory
 import com.griesbeck.travelio.ui.trips.viewmodels.TripsViewModel
-import com.squareup.picasso.Picasso
 import java.math.RoundingMode
 import java.text.SimpleDateFormat
 import java.util.*
@@ -141,6 +138,8 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
             val formatter = SimpleDateFormat("yyyy/MM/dd")
             val startdate: String = formatter.format(it.first)
             val endDate: String = formatter.format(it.second)
+            trip.startDate = startdate
+            trip.endDate = endDate
             val period = "${startdate} - ${endDate}"
             binding.etDate.setText(period)
         }
@@ -148,8 +147,7 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
 
     private fun addTripData(){
         trip.location = binding.etLocation.text.toString()
-        trip.period = binding.etDate.text.toString()
-        trip.accomodation = binding.etAccomodation.text.toString()
+        trip.accommodation = binding.etAccomodation.text.toString()
         trip.costs = binding.etCosts.text.toString()
     }
 
@@ -160,15 +158,17 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
         this.trip.id = trip.id
         this.trip.image = trip.image
         this.trip.location = trip.location
-        this.trip.period = trip.period
-        this.trip.accomodation = trip.accomodation
+        this.trip.startDate = trip.startDate
+        this.trip.endDate = trip.endDate
+        this.trip.accommodation = trip.accommodation
         this.trip.locLon = trip.locLon
         this.trip.locLat = trip.locLat
+        val period = "${trip.startDate} - ${trip.endDate}"
 
         binding.ivTripImageChoose.setImageBitmap(stringToBitMap(trip.image))
         binding.etLocation.setText(trip.location)
-        binding.etDate.setText(trip.period)
-        binding.etAccomodation.setText(trip.accomodation)
+        binding.etDate.setText(period)
+        binding.etAccomodation.setText(trip.accommodation)
         binding.etCosts.setText(trip.costs)
         binding.rvSights.layoutManager = layoutManager
         binding.rvSights.adapter = SightsAdapter(trip.sights, this)
