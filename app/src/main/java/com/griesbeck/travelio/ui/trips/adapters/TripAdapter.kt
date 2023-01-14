@@ -1,13 +1,14 @@
 package com.griesbeck.travelio
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.griesbeck.travelio.databinding.CardTripBinding
 import com.griesbeck.travelio.models.trips.Trip
 
 interface TripListener {
-    fun onTripClick(trip: Trip)
+    fun onTripClick(trip: Trip, pair: Pair<View, String>)
 }
 
 class TripAdapter(private val trips: List<Trip>, private val listener: TripListener) :
@@ -22,12 +23,17 @@ class TripAdapter(private val trips: List<Trip>, private val listener: TripListe
                 }else{
                     binding.ivLocation.setImageResource(R.drawable.placeholder)
                 }
+                binding.ivLocation.transitionName = trip.location
                 val period = "${trip.startDate} - ${trip.endDate}"
                 binding.locationTitle.text = trip.location
                 binding.tvTripPeriod.text = period
                 binding.tripAccomodation.text = trip.accommodation
                 binding.root.setOnClickListener {
-                    listener.onTripClick(trip)
+                    val pair = Pair(
+                        binding.ivLocation as View,
+                        binding.ivLocation.transitionName
+                    )
+                    listener.onTripClick(trip,pair)
                 }
             }
 

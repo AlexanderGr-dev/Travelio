@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -70,12 +71,20 @@ class TripsFragment : Fragment(), TripListener {
         _binding = null
     }
 
-    override fun onTripClick(trip: Trip) {
+    override fun onTripClick(trip: Trip, pair: Pair<View, String>) {
         val tripViewModel = ViewModelProvider(this, SharedTripViewModelFactory.getInstance()).get(
             SharedTripViewModel::class.java)
         val tripDetailIntent = Intent(this.context, TripDetailActivity::class.java)
+        val options =
+            ActivityOptionsCompat.makeSceneTransitionAnimation(
+                requireActivity(),
+                pair.first,
+                pair.second
+            )
+
         tripViewModel.setSelectedTrip(trip)
-        startActivity(tripDetailIntent)
+        tripDetailIntent.putExtra("transition",pair.second)
+        startActivity(tripDetailIntent, options.toBundle())
     }
 
     fun onToggleGroupClick(trips: List<Trip>?, checkedButton: MaterialButton) {
