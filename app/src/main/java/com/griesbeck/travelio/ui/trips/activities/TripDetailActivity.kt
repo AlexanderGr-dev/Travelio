@@ -1,25 +1,25 @@
 package com.griesbeck.travelio.ui.trips.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.griesbeck.travelio.R
-import com.griesbeck.travelio.ui.trips.adapters.SightsDetailAdapter
 import com.griesbeck.travelio.databinding.ActivityTripDetailBinding
 import com.griesbeck.travelio.getResizedBitmap
 import com.griesbeck.travelio.models.trips.Trip
 import com.griesbeck.travelio.stringToBitMap
 import com.griesbeck.travelio.ui.MainActivity
-import com.griesbeck.travelio.ui.weather.adapters.WeatherAdapter
+import com.griesbeck.travelio.ui.trips.adapters.SightsDetailAdapter
+import com.griesbeck.travelio.ui.trips.viewmodels.TripsViewModel
 import com.griesbeck.travelio.ui.viewmodels.SharedTripViewModel
 import com.griesbeck.travelio.ui.viewmodels.SharedTripViewModelFactory
-import com.griesbeck.travelio.ui.trips.viewmodels.TripsViewModel
+import com.griesbeck.travelio.ui.weather.adapters.WeatherAdapter
 import com.griesbeck.travelio.ui.weather.viewmodels.WeatherViewModel
 
 class TripDetailActivity : AppCompatActivity() {
@@ -31,6 +31,13 @@ class TripDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTripDetailBinding.inflate(layoutInflater)
+
+        val extras = intent.extras
+        if(extras!=null){
+            val transition = extras.getString("transition")
+            binding.tripImage.transitionName = transition
+        }
+
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbarTripDetail)
@@ -41,12 +48,6 @@ class TripDetailActivity : AppCompatActivity() {
         val tripViewModel = ViewModelProvider(this, SharedTripViewModelFactory.getInstance()).get(
             SharedTripViewModel::class.java)
 
-        /*if(intent.hasExtra("trip_detail")) {
-            trip = intent.extras?.getParcelable("trip_detail")
-            bindTripDetailData(trip)
-            weatherViewModel.getWeather(trip!!.locLat,trip!!.locLon)
-        }
-*/
 
         tripViewModel.selectedTrip.observe(this) { trip ->
             bindTripDetailData(trip)
@@ -126,7 +127,6 @@ class TripDetailActivity : AppCompatActivity() {
         builder.setPositiveButton("Delete") { dialog, which ->
             val tripsViewModel =
                 ViewModelProvider(this).get(TripsViewModel::class.java)
-            //trip?.let { tripsViewModel.deleteTrip(it) }
             tripsViewModel.deleteTrip(this.trip)
             dialog.dismiss()
             val mainView = Intent(this, MainActivity::class.java)

@@ -12,6 +12,8 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimary</item>
         <!-- Customize your theme here. -->
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:fragmentSharedElementEnterTransition">@transition/shared_transition</item>
     </style>
 
     <style name="LoginTheme" parent="FirebaseUI">
