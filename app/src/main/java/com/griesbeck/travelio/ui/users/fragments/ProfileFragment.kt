@@ -9,9 +9,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
@@ -30,7 +32,7 @@ class ProfileFragment: Fragment() {
     private lateinit var imageIntentLauncher : ActivityResultLauncher<Intent>
     private val binding get() = _binding!!
     private var user: User = User()
-    private lateinit var usersViewModel: UsersViewModel
+    private val usersViewModel: UsersViewModel by viewModels()
 
 
     override fun onCreateView(
@@ -39,22 +41,15 @@ class ProfileFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        usersViewModel =
-            ViewModelProvider(requireActivity()).get(UsersViewModel::class.java)
-
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         val userName: TextInputEditText = binding.etProfileEmail
         usersViewModel.user.observe(viewLifecycleOwner) { user ->
-            userName.setText(user.name)
-        }
-
-
-        usersViewModel.user.observe(viewLifecycleOwner) { user ->
             this.user = user
             bindProfile()
         }
+
 
         binding.btnChangeProfilePicture.setOnClickListener {
             showImagePicker(imageIntentLauncher,it.context)

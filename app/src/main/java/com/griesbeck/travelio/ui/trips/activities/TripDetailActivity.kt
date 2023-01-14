@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.ViewModelProvider
@@ -27,10 +28,15 @@ class TripDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTripDetailBinding
     private val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
     var trip = Trip()
+    private val tripsViewModel: TripsViewModel by viewModels()
+    private val weatherViewModel: WeatherViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTripDetailBinding.inflate(layoutInflater)
+
+        val tripViewModel: SharedTripViewModel =
+            ViewModelProvider(this, SharedTripViewModelFactory.getInstance())[SharedTripViewModel::class.java]
 
         val extras = intent.extras
         if(extras!=null){
@@ -43,17 +49,10 @@ class TripDetailActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbarTripDetail)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        val weatherViewModel =
-            ViewModelProvider(this).get(WeatherViewModel::class.java)
-        val tripViewModel = ViewModelProvider(this, SharedTripViewModelFactory.getInstance()).get(
-            SharedTripViewModel::class.java)
-
-
         tripViewModel.selectedTrip.observe(this) { trip ->
             bindTripDetailData(trip)
             weatherViewModel.getWeather(trip.locLat,trip.locLon)
         }
-
 
         weatherViewModel.weather.observe(this) { weather ->
             val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -125,8 +124,6 @@ class TripDetailActivity : AppCompatActivity() {
             dialog.dismiss()
         }
         builder.setPositiveButton("Delete") { dialog, which ->
-            val tripsViewModel =
-                ViewModelProvider(this).get(TripsViewModel::class.java)
             tripsViewModel.deleteTrip(this.trip)
             dialog.dismiss()
             val mainView = Intent(this, MainActivity::class.java)

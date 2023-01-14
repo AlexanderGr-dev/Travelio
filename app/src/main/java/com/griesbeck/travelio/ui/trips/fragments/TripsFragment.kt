@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -29,23 +30,18 @@ import java.util.*
 class TripsFragment : Fragment(), TripListener {
 
     private var _binding: FragmentTripsBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
-    //private val tripsViewModel = ViewModelProvider(this).get(TripsViewModel::class.java)
-    private val currentlayoutManager = GridLayoutManager(this.context,2)
-    val upcomingLayoutManager = GridLayoutManager(this.context,2)
-    val pastLayoutManager = GridLayoutManager(this.context,2)
+    private val currentLayoutManager = GridLayoutManager(this.context,2)
+    private val upcomingLayoutManager = GridLayoutManager(this.context,2)
+    private val pastLayoutManager = GridLayoutManager(this.context,2)
     private var trips: List<Trip>? = null
+    private val tripsViewModel: TripsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-        val tripsViewModel = ViewModelProvider(this).get(TripsViewModel::class.java)
 
         _binding = FragmentTripsBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -54,7 +50,6 @@ class TripsFragment : Fragment(), TripListener {
             val tripIntent = Intent(view?.context, TripActivity::class.java)
             startActivity(tripIntent)
         }
-
 
         tripsViewModel.trips.observe(viewLifecycleOwner, Observer { trips ->
             this.trips = trips
@@ -72,8 +67,6 @@ class TripsFragment : Fragment(), TripListener {
     }
 
     override fun onTripClick(trip: Trip, pair: Pair<View, String>) {
-        val tripViewModel = ViewModelProvider(this, SharedTripViewModelFactory.getInstance()).get(
-            SharedTripViewModel::class.java)
         val tripDetailIntent = Intent(this.context, TripDetailActivity::class.java)
         val options =
             ActivityOptionsCompat.makeSceneTransitionAnimation(
@@ -82,6 +75,8 @@ class TripsFragment : Fragment(), TripListener {
                 pair.second
             )
 
+        val tripViewModel: SharedTripViewModel =
+            ViewModelProvider(this, SharedTripViewModelFactory.getInstance())[SharedTripViewModel::class.java]
         tripViewModel.setSelectedTrip(trip)
         tripDetailIntent.putExtra("transition",pair.second)
         startActivity(tripDetailIntent, options.toBundle())
@@ -140,7 +135,7 @@ class TripsFragment : Fragment(), TripListener {
         }
 
         binding.btnCurrent.setOnClickListener{
-            binding.rvTrips.layoutManager = currentlayoutManager
+            binding.rvTrips.layoutManager = currentLayoutManager
             binding.rvTrips.adapter = TripAdapter(currentTrips,this)
         }
 

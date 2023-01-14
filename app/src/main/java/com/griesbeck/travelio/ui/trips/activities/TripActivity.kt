@@ -10,6 +10,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.griesbeck.travelio.databinding.ActivityTripBinding
 import androidx.core.util.Pair
@@ -39,10 +40,10 @@ import kotlin.collections.ArrayList
 class TripActivity : AppCompatActivity(), SightDeleteListener {
 
     private lateinit var binding: ActivityTripBinding
-    private lateinit var imageIntentLauncher : ActivityResultLauncher<Intent>
     private lateinit var mapIntentLauncher : ActivityResultLauncher<Intent>
     private val layoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false)
     var trip = Trip()
+    private val tripsViewModel: TripsViewModel by viewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,16 +55,17 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
         setSupportActionBar(binding.toolbarTrip)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        val tripsViewModel =
-            ViewModelProvider(this).get(TripsViewModel::class.java)
+        val tripViewModel: SharedTripViewModel =
+            ViewModelProvider(this, SharedTripViewModelFactory.getInstance())[SharedTripViewModel::class.java]
 
-        val tripViewModel = ViewModelProvider(this, SharedTripViewModelFactory.getInstance()).get(
-            SharedTripViewModel::class.java)
+        tripsViewModel.sights.observe(this) { sights ->
+            binding.rvSights.layoutManager = layoutManager
+            binding.rvSights.adapter = SightsAdapter(sights, this)
+        }
 
         if(intent.hasExtra("trip_edit")){
             edit = true
-            binding.btnAdd.text = getString(R.string.btn_save_trip)
-            //trip = intent.extras?.getParcelable("trip_edit")!!
+            binding.btnAddOrSave.text = getString(R.string.btn_save_trip)
             tripViewModel.selectedTrip.observe(this) { trip ->
                 bindTripEditData(trip)
             }
@@ -76,7 +78,7 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
             setDate()
         }
 
-        binding.btnAdd.setOnClickListener {
+        binding.btnAddOrSave.setOnClickListener {
             if(isUserInputCorrect()) {
                 addTripData()
             }else{
@@ -136,11 +138,11 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
         dateRangePicker.addOnPositiveButtonClickListener {
 
             val formatter = SimpleDateFormat("yyyy/MM/dd")
-            val startdate: String = formatter.format(it.first)
+            val startDate: String = formatter.format(it.first)
             val endDate: String = formatter.format(it.second)
-            trip.startDate = startdate
+            trip.startDate = startDate
             trip.endDate = endDate
-            val period = "${startdate} - ${endDate}"
+            val period = "$startDate - $endDate"
             binding.etDate.setText(period)
         }
     }
@@ -152,9 +154,6 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
     }
 
     private fun bindTripEditData(trip: Trip){
-        val tripsViewModel =
-            ViewModelProvider(this).get(TripsViewModel::class.java)
-
         this.trip.id = trip.id
         this.trip.image = trip.image
         this.trip.location = trip.location
@@ -163,6 +162,7 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
         this.trip.accommodation = trip.accommodation
         this.trip.locLon = trip.locLon
         this.trip.locLat = trip.locLat
+        this.trip.sights = trip.sights
         val period = "${trip.startDate} - ${trip.endDate}"
 
         binding.ivTripImageChoose.setImageBitmap(stringToBitMap(trip.image))
@@ -172,29 +172,25 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
         binding.etCosts.setText(trip.costs)
         binding.rvSights.layoutManager = layoutManager
         binding.rvSights.adapter = SightsAdapter(trip.sights, this)
-        tripsViewModel.sights.observe(this) { sights ->
-            binding.rvSights.layoutManager = layoutManager
-            binding.rvSights.adapter = SightsAdapter(sights, this)
-        }
     }
 
     private fun isUserInputCorrect(): Boolean{
         var correctInput = true
 
         if(binding.etLocation.text!!.isEmpty()){
-            binding.etLocation.error = "Trip name must not empty."
+            binding.etLocation.error = "Trip name must not be empty."
             correctInput = false
         }
         if(binding.etDate.text!!.isEmpty()){
-            binding.etDate.error = "Date must not empty."
+            binding.etDate.error = "Date must not be empty."
             correctInput = false
         }
         if(binding.etAccomodation.text!!.isEmpty()){
-            binding.etAccomodation.error = "Accomodation name must not empty."
+            binding.etAccomodation.error = "Accommodation name must not be empty."
             correctInput = false
         }
         if(binding.etCosts.text!!.isEmpty()){
-            binding.etCosts.error = "Costs must not empty."
+            binding.etCosts.error = "Costs must not be empty."
             correctInput = false
         }
 
@@ -220,16 +216,8 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
                                 }
                                 trip.sights = mSights
                             }
-                            val tripsViewModel =
-                                ViewModelProvider(this).get(TripsViewModel::class.java)
 
                             tripsViewModel.getSights(trip)
-
-                            tripsViewModel.sights.observe(this) { sights ->
-                                binding.rvSights.layoutManager = layoutManager
-                                binding.rvSights.adapter = SightsAdapter(sights, this)
-                            }
-
 
                         } // end of if
                     }
@@ -250,9 +238,6 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
             dialog.dismiss()
         }
         builder.setPositiveButton("Delete") { dialog, which ->
-            val tripsViewModel =
-                ViewModelProvider(this).get(TripsViewModel::class.java)
-
             tripsViewModel.deleteSight(sight,trip)
             dialog.dismiss()
         }

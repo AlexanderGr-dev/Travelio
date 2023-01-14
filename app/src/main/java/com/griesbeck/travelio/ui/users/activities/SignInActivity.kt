@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
@@ -24,6 +26,7 @@ class SignInActivity : AppCompatActivity() {
     }
 
     private val user: User = User()
+    private val usersViewModel: UsersViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +63,6 @@ class SignInActivity : AppCompatActivity() {
                     if(firebaseUser?.photoUrl.toString().isNotEmpty()){
                         user.photo = firebaseUser?.photoUrl.toString()
                     }
-                val usersViewModel = ViewModelProvider(this).get(UsersViewModel::class.java)
                 usersViewModel.addUser(user)
                 }
             val mainIntent = Intent(this, MainActivity::class.java)
