@@ -11,7 +11,8 @@ data class Trip(@get: Exclude
                 var locLon: Double = 0.0,
                 var image: String = "",
                 var location: String = "",
-                var period: String = "",
-                var accomodation: String = "",
+                var startDate: String = "",
+                var endDate: String = "",
+                var accommodation: String = "",
                 var costs: String = "",
                 var sights: List<Sight> = listOf() ) : Parcelable

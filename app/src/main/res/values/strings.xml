@@ -11,7 +11,7 @@
     <string name="previous">Previous</string>
     <string name="hint_location">e.g. New York</string>
     <string name="tv_location">Location</string>
-    <string name="hint_period">e.g. 17/12/2023 – 27/12/2023</string>
+    <string name="hint_period">e.g. 2023/12/07 – 2023/12/20</string>
     <string name="tv_date">Date</string>
     <string name="tv_accommodation">Accommodation</string>
     <string name="hint_accommodation_name">e.g. Hotel xyz</string>
@@ -38,5 +38,8 @@
     <string name="cv_trip_accommodation_text">Accommodation</string>
     <string name="cv_trip_location_image_description">Content Description</string>
     <string name="cv_trip_title_text">Title</string>
+    <string name="btn_upcoming">Upcoming</string>
+    <string name="btn_current">Current</string>
+    <string name="btn_past">Past</string>
 
 </resources>

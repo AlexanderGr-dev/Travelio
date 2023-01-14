@@ -22,9 +22,10 @@ class TripAdapter(private val trips: List<Trip>, private val listener: TripListe
                 }else{
                     binding.ivLocation.setImageResource(R.drawable.placeholder)
                 }
+                val period = "${trip.startDate} - ${trip.endDate}"
                 binding.locationTitle.text = trip.location
-                binding.tvTripPeriod.text = trip.period
-                binding.tripAccomodation.text = trip.accomodation
+                binding.tvTripPeriod.text = period
+                binding.tripAccomodation.text = trip.accommodation
                 binding.root.setOnClickListener {
                     listener.onTripClick(trip)
                 }
