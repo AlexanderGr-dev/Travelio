@@ -3,7 +3,6 @@ package com.griesbeck.travelio.ui.trips.activities
 
 import android.content.ContentValues
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -11,8 +10,7 @@ import android.view.MenuItem
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import com.google.android.material.datepicker.MaterialDatePicker
-import com.griesbeck.travelio.databinding.ActivityTripBinding
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.util.Pair
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,8 +23,11 @@ import com.google.android.libraries.places.api.net.FetchPhotoResponse
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.griesbeck.travelio.*
+import com.griesbeck.travelio.BuildConfig
+import com.griesbeck.travelio.R
+import com.griesbeck.travelio.databinding.ActivityTripBinding
 import com.griesbeck.travelio.helpers.bitMapToString
 import com.griesbeck.travelio.helpers.stringToBitMap
 import com.griesbeck.travelio.models.trips.Sight
@@ -39,7 +40,6 @@ import com.griesbeck.travelio.ui.trips.viewmodels.TripsViewModel
 import java.math.RoundingMode
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class TripActivity : AppCompatActivity(), SightDeleteListener {
 
@@ -127,14 +127,20 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
 
     private fun setDate(){
 
+        // Get current date and date in one week for default dateRange
+        val calendar = Calendar.getInstance()
+        val today = calendar.timeInMillis
+        calendar.add(Calendar.DATE, 7)
+        val oneWeekFromToday = calendar.timeInMillis
+
         //Initialize datePicker with standard range
         val dateRangePicker =
             MaterialDatePicker.Builder.dateRangePicker()
                 .setTitleText("Select range")
                 .setSelection(
                     Pair(
-                        MaterialDatePicker.thisMonthInUtcMilliseconds(),
-                        MaterialDatePicker.todayInUtcMilliseconds()
+                        today,
+                        oneWeekFromToday
                     )
                 )
                 .build()
