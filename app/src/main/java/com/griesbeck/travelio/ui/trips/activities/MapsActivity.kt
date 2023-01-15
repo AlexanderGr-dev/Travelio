@@ -19,6 +19,7 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.griesbeck.travelio.BuildConfig
 import com.griesbeck.travelio.R
 import com.griesbeck.travelio.databinding.ActivityMapsBinding
@@ -76,20 +77,27 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
-        map.uiSettings.setZoomControlsEnabled(true)
 
-        val sydney = LatLng(49.0, 12.1)
-        map.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        // Enable zoom buttons.
+        map.uiSettings.isZoomControlsEnabled = true
+
+        // Start point on maps is regensburg.
+        val regensburg = LatLng(49.0, 12.1)
+        map.moveCamera(CameraUpdateFactory.newLatLng(regensburg))
+
+        // Set clickListener on all points of interests to be able to add sights.
         map.setOnPoiClickListener { poi ->
-
+            // Zoom to the point of interest
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(poi.latLng, 15f))
             addSightDialog(poi)
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
 
         val resultIntent = Intent()
+        // Send all added sights back with resultCallback
         resultIntent.putParcelableArrayListExtra("sights", ArrayList(sights))
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
@@ -97,16 +105,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun addSightDialog(poi: PointOfInterest) {
+
+        // Setup dialog to ask user, if he really wants to add poi to sights list
         val builder = MaterialAlertDialogBuilder(this)
         builder.setTitle("Add")
         builder.setMessage("Do you want to add ${poi.name} to your sights list?")
-        builder.setNeutralButton("Cancel") { dialog, which ->
+        builder.setNeutralButton("Cancel") { dialog, _ ->
             dialog.dismiss()
         }
-        builder.setPositiveButton("Add") { dialog, which ->
-            val sight: Sight = Sight(poi.placeId)
+        builder.setPositiveButton("Add") { dialog, _ ->
+            val sight = Sight(poi.placeId)
             sights.add(sight)
             dialog.dismiss()
+            Snackbar.make(findViewById(R.id.rl_maps), "${poi.name} has been added to sights.", Snackbar.LENGTH_LONG).show()
         }
         builder.show()
     }
