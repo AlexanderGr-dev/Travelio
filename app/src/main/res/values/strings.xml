@@ -41,5 +41,28 @@
     <string name="btn_upcoming">Upcoming</string>
     <string name="btn_current">Current</string>
     <string name="btn_past">Past</string>
+    <string name="iv_trip_image_choose_content_description">Shows image of the trip target</string>
+    <string name="trip_image_content_description">Shows image of the trip target</string>
+    <string name="tv_detail_location_dummy_text">Location_Name</string>
+    <string name="tv_detail_date_dummy_text">17/08/2022 – 18/08/2022</string>
+    <string name="tv_detail_accommodation_dummy_text">Accommodation Content</string>
+    <string name="tv_detail_costs_dummy_text">Costs Content</string>
+    <string name="tv_weather">Weather</string>
+    <string name="tv_sight_name_dummy_text">Title</string>
+    <string name="btn_delete_sight">Delete</string>
+    <string name="iv_sight_content_description">Shows picture of the sight</string>
+    <string name="iv_sight_detail_content_description">Shows picture of the sight</string>
+    <string name="tv_sight_detail_name_dummy_text">Title</string>
+    <string name="iv_profile_picture_content_description">Shows user profile picture</string>
+    <string name="fab_add_content_description">Button to add a new trip</string>
+    <string name="menu_profile">Profile</string>
+    <string name="menu_logout">Logout</string>
+    <string name="tv_weather_date">Date</string>
+    <string name="tv_weather_text">Weather:</string>
+    <string name="tv_weather_content_dummy_text">Slight rain showers</string>
+    <string name="tv_temp_max_text">Max Temp.:</string>
+    <string name="tv_temp_max_content_dummy_text">23.0</string>
+    <string name="tv_temp_min_text">Min Temp.:</string>
+    <string name="tv_temp_min_content_dummy_text">15.0</string>
 
 </resources>

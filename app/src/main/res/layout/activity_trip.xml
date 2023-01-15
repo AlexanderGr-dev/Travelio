@@ -54,9 +54,10 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_image"
-                app:srcCompat="@drawable/placeholder" />
+                app:srcCompat="@drawable/placeholder"
+                android:contentDescription="@string/iv_trip_image_choose_content_description" />
 
-            <fragment android:id="@+id/places_autocomplete_fragment"
+            <androidx.fragment.app.FragmentContainerView android:id="@+id/places_autocomplete_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
@@ -67,22 +68,6 @@
                 app:layout_constraintTop_toBottomOf="@id/iv_trip_image_choose"
                 />
 
-            <!--<com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_choose_image"
-                style="@style/Widget.Material3.Button.ElevatedButton.Icon"
-                android:layout_width="119dp"
-                android:layout_height="74dp"
-                android:layout_marginTop="104dp"
-                android:backgroundTint="@color/secondary"
-                android:text="@string/btn_choose_image"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintHorizontal_bias="0.421"
-                app:layout_constraintLeft_toRightOf="@id/iv_trip_image_choose"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_image" />-->
 
             <TextView
                 android:id="@+id/tv_location"
@@ -156,7 +141,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
-                android:id="@+id/tv_accomodation"
+                android:id="@+id/tv_accommodation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/tv_accommodation"
@@ -169,7 +154,7 @@
                 app:layout_constraintTop_toBottomOf="@id/tf_period"/>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tf_accomodation_name"
+                android:id="@+id/tf_accommodation_name"
                 style="?attr/textInputFilledStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -177,11 +162,11 @@
                 android:padding="10dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_accomodation">
+                app:layout_constraintTop_toBottomOf="@id/tv_accommodation">
 
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_accomodation"
+                    android:id="@+id/et_accommodation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
@@ -201,7 +186,7 @@
                 android:paddingStart="10dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tf_accomodation_name"/>
+                app:layout_constraintTop_toBottomOf="@id/tf_accommodation_name"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tf_costs"
@@ -274,7 +259,7 @@
 
             <com.google.android.material.button.MaterialButton
                 style="@style/Widget.Material3.Button.ElevatedButton"
-                android:id="@+id/btn_add"
+                android:id="@+id/btn_add_or_save"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/secondary"

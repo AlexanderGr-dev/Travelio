@@ -12,12 +12,12 @@
         <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/fui_ic_anonymous_white_24dp"
-            android:title="Profile" />
+            android:title="@string/menu_profile" />
 
         <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/common_full_open_on_phone"
-            android:title="Logout" />
+            android:title="@string/menu_logout" />
 
     </group>
 </menu>
