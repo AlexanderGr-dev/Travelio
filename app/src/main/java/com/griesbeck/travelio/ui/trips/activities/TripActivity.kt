@@ -27,10 +27,14 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.griesbeck.travelio.*
+import com.griesbeck.travelio.helpers.bitMapToString
+import com.griesbeck.travelio.helpers.stringToBitMap
 import com.griesbeck.travelio.models.trips.Sight
 import com.griesbeck.travelio.models.trips.Trip
-import com.griesbeck.travelio.ui.viewmodels.SharedTripViewModel
-import com.griesbeck.travelio.ui.viewmodels.SharedTripViewModelFactory
+import com.griesbeck.travelio.ui.trips.adapters.SightDeleteListener
+import com.griesbeck.travelio.ui.trips.adapters.SightsAdapter
+import com.griesbeck.travelio.ui.trips.viewmodels.SharedTripViewModel
+import com.griesbeck.travelio.ui.trips.viewmodels.SharedTripViewModelFactory
 import com.griesbeck.travelio.ui.trips.viewmodels.TripsViewModel
 import java.math.RoundingMode
 import java.text.SimpleDateFormat
@@ -48,7 +52,7 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        var edit: Boolean = false
+        var edit = false
         binding = ActivityTripBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -122,6 +126,8 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
     }
 
     private fun setDate(){
+
+        //Initialize datePicker with standard range
         val dateRangePicker =
             MaterialDatePicker.Builder.dateRangePicker()
                 .setTitleText("Select range")
@@ -137,6 +143,7 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
 
         dateRangePicker.addOnPositiveButtonClickListener {
 
+            // Get start and end date of selected period in yyyy/MM/dd format
             val formatter = SimpleDateFormat("yyyy/MM/dd")
             val startDate: String = formatter.format(it.first)
             val endDate: String = formatter.format(it.second)
@@ -149,7 +156,7 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
 
     private fun addTripData(){
         trip.location = binding.etLocation.text.toString()
-        trip.accommodation = binding.etAccomodation.text.toString()
+        trip.accommodation = binding.etAccommodation.text.toString()
         trip.costs = binding.etCosts.text.toString()
     }
 
@@ -165,10 +172,14 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
         this.trip.sights = trip.sights
         val period = "${trip.startDate} - ${trip.endDate}"
 
-        binding.ivTripImageChoose.setImageBitmap(stringToBitMap(trip.image))
+        if(trip.image.isNotEmpty()) {
+            binding.ivTripImageChoose.setImageBitmap(stringToBitMap(trip.image))
+        }else{
+            binding.ivTripImageChoose.setImageResource(R.drawable.placeholder)
+        }
         binding.etLocation.setText(trip.location)
         binding.etDate.setText(period)
-        binding.etAccomodation.setText(trip.accommodation)
+        binding.etAccommodation.setText(trip.accommodation)
         binding.etCosts.setText(trip.costs)
         binding.rvSights.layoutManager = layoutManager
         binding.rvSights.adapter = SightsAdapter(trip.sights, this)
@@ -185,8 +196,8 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
             binding.etDate.error = "Date must not be empty."
             correctInput = false
         }
-        if(binding.etAccomodation.text!!.isEmpty()){
-            binding.etAccomodation.error = "Accommodation name must not be empty."
+        if(binding.etAccommodation.text!!.isEmpty()){
+            binding.etAccommodation.error = "Accommodation name must not be empty."
             correctInput = false
         }
         if(binding.etCosts.text!!.isEmpty()){
@@ -205,10 +216,12 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
                     RESULT_OK -> {
                         if (result.data != null) {
 
+                            // Add all sights form mapCallback to trip
                             if(trip.sights.isEmpty()) {
                                 trip.sights =
                                     result.data!!.extras?.getParcelableArrayList("sights")!!
                             }else{
+                                // If trip sights are not empty
                                 val sights: ArrayList<Sight> = result.data!!.extras?.getParcelableArrayList("sights")!!
                                 val mSights = trip.sights.toMutableList()
                                 sights.forEach { sight ->
@@ -219,7 +232,7 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
 
                             tripsViewModel.getSights(trip)
 
-                        } // end of if
+                        }
                     }
                     RESULT_CANCELED -> { } else -> { }
                 }
@@ -231,13 +244,15 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
     }
 
     private fun deleteSightDialog(sight: Sight) {
+
+        // Setup dialog to ask user, if he really wants to delete the sight
         val builder = MaterialAlertDialogBuilder(this)
         builder.setTitle("Delete Sight")
         builder.setMessage("Do you really want to delete this sight?")
-        builder.setNeutralButton("Cancel") { dialog, which ->
+        builder.setNeutralButton("Cancel") { dialog, _ ->
             dialog.dismiss()
         }
-        builder.setPositiveButton("Delete") { dialog, which ->
+        builder.setPositiveButton("Delete") { dialog, _ ->
             tripsViewModel.deleteSight(sight,trip)
             dialog.dismiss()
         }
@@ -269,11 +284,11 @@ class TripActivity : AppCompatActivity(), SightDeleteListener {
                 }
                 trip.location = place.name as String
 
-                val metada = place.photoMetadatas
-                if (metada == null || metada.isEmpty()) {
+                val metaData = place.photoMetadatas
+                if (metaData == null || metaData.isEmpty()) {
                     return
                 }
-                val photoMetadata = metada.first()
+                val photoMetadata = metaData.first()
 
                 // Create a FetchPhotoRequest.
                 val photoRequest = FetchPhotoRequest.builder(photoMetadata)

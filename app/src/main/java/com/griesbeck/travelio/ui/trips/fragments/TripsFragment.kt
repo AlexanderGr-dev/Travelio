@@ -8,19 +8,18 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.button.MaterialButton
-import com.griesbeck.travelio.TripAdapter
-import com.griesbeck.travelio.TripListener
+import com.griesbeck.travelio.ui.trips.adapters.TripAdapter
+import com.griesbeck.travelio.ui.trips.adapters.TripListener
 import com.griesbeck.travelio.databinding.FragmentTripsBinding
 import com.griesbeck.travelio.models.trips.Trip
 import com.griesbeck.travelio.ui.trips.activities.TripActivity
 import com.griesbeck.travelio.ui.trips.activities.TripDetailActivity
 import com.griesbeck.travelio.ui.trips.viewmodels.TripsViewModel
-import com.griesbeck.travelio.ui.viewmodels.SharedTripViewModel
-import com.griesbeck.travelio.ui.viewmodels.SharedTripViewModelFactory
+import com.griesbeck.travelio.ui.trips.viewmodels.SharedTripViewModel
+import com.griesbeck.travelio.ui.trips.viewmodels.SharedTripViewModelFactory
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -51,12 +50,12 @@ class TripsFragment : Fragment(), TripListener {
             startActivity(tripIntent)
         }
 
-        tripsViewModel.trips.observe(viewLifecycleOwner, Observer { trips ->
+        tripsViewModel.trips.observe(viewLifecycleOwner) { trips ->
             this.trips = trips
             val checkedButtonId = binding.toggleButton.checkedButtonId
             val checkedButton: MaterialButton = binding.toggleButton.findViewById(checkedButtonId)
-            onToggleGroupClick(trips,checkedButton)
-        })
+            onToggleGroupClick(trips, checkedButton)
+        }
 
         return root
     }
@@ -82,7 +81,7 @@ class TripsFragment : Fragment(), TripListener {
         startActivity(tripDetailIntent, options.toBundle())
     }
 
-    fun onToggleGroupClick(trips: List<Trip>?, checkedButton: MaterialButton) {
+    private fun onToggleGroupClick(trips: List<Trip>?, checkedButton: MaterialButton) {
 
         val upcomingTrips = ArrayList<Trip>()
         val pastTrips = ArrayList<Trip>()
@@ -98,12 +97,14 @@ class TripsFragment : Fragment(), TripListener {
                     val endDate = format.parse(trip.endDate)
                     val currentDateTime = LocalDateTime.now().format(pattern)
                     val currentDate = currentFormat.parse(currentDateTime)
-                    if(startDate > currentDate){
-                        upcomingTrips.add(trip)
-                    }else if(endDate < currentDate){
-                        pastTrips.add(trip)
-                    }else{
-                        currentTrips.add(trip)
+                    if (startDate != null && endDate != null) {
+                        if(startDate > currentDate){
+                            upcomingTrips.add(trip)
+                        }else if(endDate < currentDate){
+                            pastTrips.add(trip)
+                        }else{
+                            currentTrips.add(trip)
+                        }
                     }
                 }catch (e: Exception){
                     e.printStackTrace()
