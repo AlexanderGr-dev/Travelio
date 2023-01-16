@@ -24,19 +24,21 @@ class WeatherApi {
         liveData: MutableLiveData<Daily>
     ) {
 
+        // Generates Java Interface to Weather API and converts response with GSON
         val retrofit: Retrofit = Retrofit.Builder()
             .baseUrl(Constants.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-
+        // Create instance of WeatherService
         val weatherService: WeatherService = retrofit.create(WeatherService::class.java)
 
+        // Instantiate get api call for weather data
         val apiCall = weatherService.getWeatherData(latitude,longitude,daily,timezone)
 
-        Log.d("temp", apiCall.request().url().toString())
 
 
+       // Send api call to weather server and get response
         apiCall.enqueue(object: Callback<WeatherResponse>{
             override fun onResponse(
                 call: Call<WeatherResponse>,
@@ -51,7 +53,7 @@ class WeatherApi {
             }
 
             override fun onFailure(call: Call<WeatherResponse>, t: Throwable) {
-                Log.i("info","Fail")
+                TODO("Not yet implemented")
             }
 
         })

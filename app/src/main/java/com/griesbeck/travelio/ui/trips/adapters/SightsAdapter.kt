@@ -1,4 +1,4 @@
-package com.griesbeck.travelio
+package com.griesbeck.travelio.ui.trips.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -21,7 +21,7 @@ class SightsAdapter(private val sights: List<Sight>, private val listener: Sight
 
     class ViewHolder(private val binding: CardSightBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        val placesClient: PlacesClient = Places.createClient(itemView.context)
+        private val placesClient: PlacesClient = Places.createClient(itemView.context)
 
         fun bind(sight: Sight, listener: SightDeleteListener) {
             val placeId = sight.placeId
@@ -32,11 +32,11 @@ class SightsAdapter(private val sights: List<Sight>, private val listener: Sight
                     val place = response.place
 
                     // Get the photo metadata.
-                    val metada = place.photoMetadatas
-                    if (metada == null || metada.isEmpty()) {
+                    val metaData = place.photoMetadatas
+                    if (metaData == null || metaData.isEmpty()) {
                         return@addOnSuccessListener
                     }
-                    val photoMetadata = metada.first()
+                    val photoMetadata = metaData.first()
 
                     // Create a FetchPhotoRequest.
                     val photoRequest = FetchPhotoRequest.builder(photoMetadata)

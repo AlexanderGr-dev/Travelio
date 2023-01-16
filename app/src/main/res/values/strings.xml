@@ -9,16 +9,16 @@
 
     <string name="menu_trips">Trips</string>
     <string name="previous">Previous</string>
-    <string name="hint_location">Name of Location</string>
+    <string name="hint_location">e.g. New York</string>
     <string name="tv_location">Location</string>
-    <string name="hint_period">Period</string>
+    <string name="hint_period">e.g. 2023/12/07 – 2023/12/20</string>
     <string name="tv_date">Date</string>
-    <string name="tv_accomodation">Accomodation</string>
-    <string name="hint_accomodation_name">Name of accomodation</string>
+    <string name="tv_accommodation">Accommodation</string>
+    <string name="hint_accommodation_name">e.g. Hotel xyz</string>
     <string name="tv_costs">Costs</string>
     <string name="btn_add_trip">Add trip</string>
     <string name="btn_save_trip">Save trip</string>
-    <string name="hint_costs">Amount</string>
+    <string name="hint_costs">e.g. 1000 €</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="tv_image">Trip Image</string>
@@ -35,8 +35,34 @@
     <string name="btn_delete_profile_text">Delete Account</string>
     <string name="btn_choose_profile_pic_text">Choose Profile Picture</string>
     <string name="cv_trip_date_text">Date</string>
-    <string name="cv_trip_accomodation_text">Accomodation</string>
+    <string name="cv_trip_accommodation_text">Accommodation</string>
     <string name="cv_trip_location_image_description">Content Description</string>
     <string name="cv_trip_title_text">Title</string>
+    <string name="btn_upcoming">Upcoming</string>
+    <string name="btn_current">Current</string>
+    <string name="btn_past">Past</string>
+    <string name="iv_trip_image_choose_content_description">Shows image of the trip target</string>
+    <string name="trip_image_content_description">Shows image of the trip target</string>
+    <string name="tv_detail_location_dummy_text">Location_Name</string>
+    <string name="tv_detail_date_dummy_text">17/08/2022 – 18/08/2022</string>
+    <string name="tv_detail_accommodation_dummy_text">Accommodation Content</string>
+    <string name="tv_detail_costs_dummy_text">Costs Content</string>
+    <string name="tv_weather">Weather</string>
+    <string name="tv_sight_name_dummy_text">Title</string>
+    <string name="btn_delete_sight">Delete</string>
+    <string name="iv_sight_content_description">Shows picture of the sight</string>
+    <string name="iv_sight_detail_content_description">Shows picture of the sight</string>
+    <string name="tv_sight_detail_name_dummy_text">Title</string>
+    <string name="iv_profile_picture_content_description">Shows user profile picture</string>
+    <string name="fab_add_content_description">Button to add a new trip</string>
+    <string name="menu_profile">Profile</string>
+    <string name="menu_logout">Logout</string>
+    <string name="tv_weather_date">Date</string>
+    <string name="tv_weather_text">Weather:</string>
+    <string name="tv_weather_content_dummy_text">Slight rain showers</string>
+    <string name="tv_temp_max_text">Max Temp.:</string>
+    <string name="tv_temp_max_content_dummy_text">23.0</string>
+    <string name="tv_temp_min_text">Min Temp.:</string>
+    <string name="tv_temp_min_content_dummy_text">15.0</string>
 
 </resources>

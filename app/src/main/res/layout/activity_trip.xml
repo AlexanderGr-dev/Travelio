@@ -54,7 +54,8 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_image"
-                app:srcCompat="@drawable/placeholder" />
+                app:srcCompat="@drawable/placeholder"
+                android:contentDescription="@string/iv_trip_image_choose_content_description" />
 
             <fragment android:id="@+id/places_autocomplete_fragment"
                 android:layout_width="match_parent"
@@ -67,22 +68,6 @@
                 app:layout_constraintTop_toBottomOf="@id/iv_trip_image_choose"
                 />
 
-            <!--<com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_choose_image"
-                style="@style/Widget.Material3.Button.ElevatedButton.Icon"
-                android:layout_width="119dp"
-                android:layout_height="74dp"
-                android:layout_marginTop="104dp"
-                android:backgroundTint="@color/secondary"
-                android:text="@string/btn_choose_image"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintHorizontal_bias="0.421"
-                app:layout_constraintLeft_toRightOf="@id/iv_trip_image_choose"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_image" />-->
 
             <TextView
                 android:id="@+id/tv_location"
@@ -113,6 +98,9 @@
                     android:id="@+id/et_location"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:maxLength="20"
+                    android:maxLines="1"
                     />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -153,10 +141,10 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
-                android:id="@+id/tv_accomodation"
+                android:id="@+id/tv_accommodation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/tv_accomodation"
+                android:text="@string/tv_accommodation"
                 android:textColor="@color/primary"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -166,21 +154,24 @@
                 app:layout_constraintTop_toBottomOf="@id/tf_period"/>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tf_accomodation_name"
+                android:id="@+id/tf_accommodation_name"
                 style="?attr/textInputFilledStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/hint_accomodation_name"
+                android:hint="@string/hint_accommodation_name"
                 android:padding="10dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_accomodation">
+                app:layout_constraintTop_toBottomOf="@id/tv_accommodation">
 
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_accomodation"
+                    android:id="@+id/et_accommodation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:maxLength="28"
+                    android:maxLines="1"
                     />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -195,7 +186,7 @@
                 android:paddingStart="10dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tf_accomodation_name"/>
+                app:layout_constraintTop_toBottomOf="@id/tf_accommodation_name"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tf_costs"
@@ -214,6 +205,9 @@
                     android:id="@+id/et_costs"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:maxLength="10"
+                    android:maxLines="1"
                     />
             </com.google.android.material.textfield.TextInputLayout>
             
@@ -264,18 +258,20 @@
 
 
             <com.google.android.material.button.MaterialButton
-                style="@style/Widget.Material3.Button.ElevatedButton.Icon"
-                android:id="@+id/btn_add"
-                android:layout_width="wrap_content"
+                style="@style/Widget.Material3.Button.ElevatedButton"
+                android:id="@+id/btn_add_or_save"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/secondary"
                 android:textColor="@color/white"
+                android:padding="5dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"
                 android:text="@string/btn_add_trip"
                 android:textAlignment="center"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                app:icon="@drawable/ic_baseline_add_24"
-                app:iconTint="@color/white"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/btn_add_sights"/>

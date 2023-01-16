@@ -20,6 +20,8 @@ RecyclerView.Adapter<WeatherAdapter.ViewHolder>() {
         }
 
         private fun getWeatherFromCode(code: Int): String{
+
+            // Changes weatherCode to string representation of the code
             when(code){
                 0 -> return "Clear Sky"
                 1,2,3 -> return "Partly cloudy"

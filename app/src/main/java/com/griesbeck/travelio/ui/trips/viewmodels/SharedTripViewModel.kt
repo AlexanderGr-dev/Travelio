@@ -1,4 +1,4 @@
-package com.griesbeck.travelio.ui.viewmodels
+package com.griesbeck.travelio.ui.trips.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

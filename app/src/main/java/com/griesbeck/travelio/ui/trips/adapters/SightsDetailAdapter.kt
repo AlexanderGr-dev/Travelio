@@ -30,11 +30,11 @@ class SightsDetailAdapter(private val sights: List<Sight>) :
                     val place = response.place
 
                     // Get the photo metadata.
-                    val metada = place.photoMetadatas
-                    if (metada == null || metada.isEmpty()) {
+                    val metaData = place.photoMetadatas
+                    if (metaData == null || metaData.isEmpty()) {
                         return@addOnSuccessListener
                     }
-                    val photoMetadata = metada.first()
+                    val photoMetadata = metaData.first()
 
                     // Create a FetchPhotoRequest.
                     val photoRequest = FetchPhotoRequest.builder(photoMetadata)

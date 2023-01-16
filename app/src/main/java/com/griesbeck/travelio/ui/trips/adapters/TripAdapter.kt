@@ -1,13 +1,16 @@
-package com.griesbeck.travelio
+package com.griesbeck.travelio.ui.trips.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.griesbeck.travelio.R
 import com.griesbeck.travelio.databinding.CardTripBinding
+import com.griesbeck.travelio.helpers.stringToBitMap
 import com.griesbeck.travelio.models.trips.Trip
 
 interface TripListener {
-    fun onTripClick(trip: Trip)
+    fun onTripClick(trip: Trip, pair: Pair<View, String>)
 }
 
 class TripAdapter(private val trips: List<Trip>, private val listener: TripListener) :
@@ -17,13 +20,23 @@ class TripAdapter(private val trips: List<Trip>, private val listener: TripListe
     class ViewHolder(private val binding: CardTripBinding) : RecyclerView.ViewHolder(binding.root) {
 
             fun bind(trip: Trip, listener: TripListener) {
-                //Picasso.get().load(trip.image.toUri()).into(binding.ivLocation)
-                binding.ivLocation.setImageBitmap(stringToBitMap(trip.image))
+                if(trip.image.isNotEmpty()) {
+                    binding.ivLocation.setImageBitmap(stringToBitMap(trip.image))
+                }else{
+                    binding.ivLocation.setImageResource(R.drawable.placeholder)
+                }
+                binding.ivLocation.transitionName = trip.location
+                val period = "${trip.startDate} - ${trip.endDate}"
                 binding.locationTitle.text = trip.location
-                binding.tvTripPeriod.text = trip.period
-                binding.tripAccomodation.text = trip.accomodation
+                binding.tvTripPeriod.text = period
+                binding.tripAccommodation.text = trip.accommodation
                 binding.root.setOnClickListener {
-                    listener.onTripClick(trip)
+                    // Initialize pair for shared element transition
+                    val pair = Pair(
+                        binding.ivLocation as View,
+                        binding.ivLocation.transitionName
+                    )
+                    listener.onTripClick(trip,pair)
                 }
             }
 

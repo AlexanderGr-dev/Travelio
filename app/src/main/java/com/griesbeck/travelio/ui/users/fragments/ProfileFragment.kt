@@ -12,14 +12,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.textfield.TextInputEditText
 import com.griesbeck.travelio.databinding.FragmentProfileBinding
-import com.griesbeck.travelio.models.trips.Sight
 import com.griesbeck.travelio.models.users.User
-import com.griesbeck.travelio.showImagePicker
-import com.griesbeck.travelio.ui.trips.viewmodels.TripsViewModel
+import com.griesbeck.travelio.helpers.showImagePicker
 import com.griesbeck.travelio.ui.users.activities.SignInActivity
 import com.griesbeck.travelio.ui.users.viewmodels.UsersViewModel
 import com.squareup.picasso.Picasso
@@ -30,7 +27,7 @@ class ProfileFragment: Fragment() {
     private lateinit var imageIntentLauncher : ActivityResultLauncher<Intent>
     private val binding get() = _binding!!
     private var user: User = User()
-    private lateinit var usersViewModel: UsersViewModel
+    private val usersViewModel: UsersViewModel by viewModels()
 
 
     override fun onCreateView(
@@ -39,22 +36,14 @@ class ProfileFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        usersViewModel =
-            ViewModelProvider(requireActivity()).get(UsersViewModel::class.java)
-
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
-        val userName: TextInputEditText = binding.etProfileEmail
-        usersViewModel.user.observe(viewLifecycleOwner) { user ->
-            userName.setText(user.name)
-        }
-
 
         usersViewModel.user.observe(viewLifecycleOwner) { user ->
             this.user = user
             bindProfile()
         }
+
 
         binding.btnChangeProfilePicture.setOnClickListener {
             showImagePicker(imageIntentLauncher,it.context)
@@ -87,7 +76,7 @@ class ProfileFragment: Fragment() {
             binding.etProfileName.setText(user.name)
         }
         binding.etProfileEmail.setText(user.email)
-        if(user.photo != "" && user.photo != null){
+        if(user.photo != ""){
             Picasso.get().load(user.photo.toUri()).into(binding.ivProfilePicture)
         }
     }
@@ -96,13 +85,14 @@ class ProfileFragment: Fragment() {
         val builder = MaterialAlertDialogBuilder(requireView().context)
         builder.setTitle("Delete Account")
         builder.setMessage("Do you really want to delete your Account? All trips will be lost.")
-        builder.setNeutralButton("Cancel") { dialog, which ->
+        builder.setNeutralButton("Cancel") { dialog, _ ->
             dialog.dismiss()
         }
-        builder.setPositiveButton("Delete") { dialog, which ->
+        builder.setPositiveButton("Delete") { dialog, _ ->
             usersViewModel.deleteCurrentUser(requireView().context,user)
         val signInIntent = Intent(view?.context, SignInActivity::class.java)
         signInIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        dialog.dismiss()
         startActivity(signInIntent)
         }
         builder.show()
@@ -133,7 +123,7 @@ class ProfileFragment: Fragment() {
                         Toast.makeText(view?.context, "Task cancelled", Toast.LENGTH_SHORT).show()
                     }
                     else -> {
-                        Toast.makeText(view?.context, "Some error occured", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(view?.context, "Some error occurred", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
