@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.ViewModelProvider
@@ -11,14 +12,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.griesbeck.travelio.R
 import com.griesbeck.travelio.databinding.ActivityTripDetailBinding
-import com.griesbeck.travelio.getResizedBitmap
+import com.griesbeck.travelio.helpers.getResizedBitmap
 import com.griesbeck.travelio.models.trips.Trip
-import com.griesbeck.travelio.stringToBitMap
+import com.griesbeck.travelio.helpers.stringToBitMap
 import com.griesbeck.travelio.ui.MainActivity
 import com.griesbeck.travelio.ui.trips.adapters.SightsDetailAdapter
 import com.griesbeck.travelio.ui.trips.viewmodels.TripsViewModel
-import com.griesbeck.travelio.ui.viewmodels.SharedTripViewModel
-import com.griesbeck.travelio.ui.viewmodels.SharedTripViewModelFactory
+import com.griesbeck.travelio.ui.trips.viewmodels.SharedTripViewModel
+import com.griesbeck.travelio.ui.trips.viewmodels.SharedTripViewModelFactory
 import com.griesbeck.travelio.ui.weather.adapters.WeatherAdapter
 import com.griesbeck.travelio.ui.weather.viewmodels.WeatherViewModel
 
@@ -27,10 +28,15 @@ class TripDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTripDetailBinding
     private val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
     var trip = Trip()
+    private val tripsViewModel: TripsViewModel by viewModels()
+    private val weatherViewModel: WeatherViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTripDetailBinding.inflate(layoutInflater)
+
+        val tripViewModel: SharedTripViewModel =
+            ViewModelProvider(this, SharedTripViewModelFactory.getInstance())[SharedTripViewModel::class.java]
 
         val extras = intent.extras
         if(extras!=null){
@@ -43,17 +49,10 @@ class TripDetailActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbarTripDetail)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        val weatherViewModel =
-            ViewModelProvider(this).get(WeatherViewModel::class.java)
-        val tripViewModel = ViewModelProvider(this, SharedTripViewModelFactory.getInstance()).get(
-            SharedTripViewModel::class.java)
-
-
         tripViewModel.selectedTrip.observe(this) { trip ->
             bindTripDetailData(trip)
             weatherViewModel.getWeather(trip.locLat,trip.locLon)
         }
-
 
         weatherViewModel.weather.observe(this) { weather ->
             val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -97,36 +96,42 @@ class TripDetailActivity : AppCompatActivity() {
             this.trip.locLon = trip.locLon
             this.trip.locLat = trip.locLat
         }
+        // Get the site of trip image view
         val ivBitmap = binding.tripImage.drawable.toBitmap()
         val bitmapWidth = ivBitmap.width
         val bitmapHeight = ivBitmap.height
+
+        // Convert bitmapString to btimap and resize to size of view
         val bitmap = trip?.image?.let { stringToBitMap(it) }
         val resizedBitmap = bitmap?.let { getResizedBitmap(it,bitmapWidth,bitmapHeight) }
+
         if(resizedBitmap != null) {
             binding.tripImage.setImageBitmap(resizedBitmap)
         }else{
             binding.tripImage.setImageResource(R.drawable.placeholder)
         }
+
+        // Fill data in editText Fields
         val period = "${trip?.startDate} - ${trip?.endDate}"
         val costs = trip?.costs + " €"
         binding.tvDetailLocationContent.text = trip?.location
         binding.tvDetailDateContent.text = period
         binding.tvDetailCostsContent.text = costs
-        binding.tvDetailAccomodationContent.text = trip?.accommodation
+        binding.tvDetailAccommodationContent.text = trip?.accommodation
         binding.rvSightsDetail.layoutManager = layoutManager
         binding.rvSightsDetail.adapter = SightsDetailAdapter(trip!!.sights)
     }
 
     private fun deleteDialog() {
+
+        // Setup dialog to ask user, if he really wants to delete trip
         val builder = MaterialAlertDialogBuilder(this)
         builder.setTitle("Delete Trip")
         builder.setMessage("Do you really want to delete this trip?")
-        builder.setNeutralButton("Cancel") { dialog, which ->
+        builder.setNeutralButton("Cancel") { dialog, _ ->
             dialog.dismiss()
         }
-        builder.setPositiveButton("Delete") { dialog, which ->
-            val tripsViewModel =
-                ViewModelProvider(this).get(TripsViewModel::class.java)
+        builder.setPositiveButton("Delete") { dialog, _ ->
             tripsViewModel.deleteTrip(this.trip)
             dialog.dismiss()
             val mainView = Intent(this, MainActivity::class.java)

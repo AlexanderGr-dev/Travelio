@@ -6,17 +6,16 @@ import android.view.Menu
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.firebase.ui.auth.AuthUI
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.navigation.NavigationView
 import com.griesbeck.travelio.R
 import com.griesbeck.travelio.databinding.ActivityMainBinding
@@ -29,6 +28,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private val usersViewModel: UsersViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,28 +53,26 @@ class MainActivity : AppCompatActivity() {
         navView.menu.findItem(R.id.nav_logout).setOnMenuItemClickListener {
             AuthUI.getInstance()
                 .signOut(this)
-                .addOnCompleteListener ( this, OnCompleteListener { task ->
-                    if(task.isSuccessful){
-                        Toast.makeText(this, "Logout successfull", Toast.LENGTH_LONG).show()
+                .addOnCompleteListener ( this) { task ->
+                    if (task.isSuccessful) {
+                        Toast.makeText(this, "Logout successfully", Toast.LENGTH_LONG).show()
                         val signInIntent = Intent(this, SignInActivity::class.java)
                         signInIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                         startActivity(signInIntent)
-                    }else{
-                        Toast.makeText(this, "Logout failed. Try again later.", Toast.LENGTH_LONG).show()
+                    } else {
+                        Toast.makeText(this, "Logout failed. Try again later.", Toast.LENGTH_LONG)
+                            .show()
                     }
-                })
+                }
             return@setOnMenuItemClickListener true
         }
-
-        val usersViewModel =
-            ViewModelProvider(this).get(UsersViewModel::class.java)
 
 
         usersViewModel.user.observe(this) { user ->
             if(user != null) {
                 val header = navView.getHeaderView(0)
                 val navPhoto = header.findViewById<ImageView>(R.id.iv_nav_header_photo)
-                if (user.photo != "" && user.photo != null) {
+                if (user.photo != "") {
                     Picasso.get()
                         .load(user.photo.toUri())
                         .into(navPhoto)
@@ -89,12 +87,12 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+   /* override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
         return true
     }
-
+*/
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)

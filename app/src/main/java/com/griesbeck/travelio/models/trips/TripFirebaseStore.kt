@@ -23,7 +23,7 @@ class TripFirebaseStore: TripStore {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val trips: MutableList<Trip> = mutableListOf()
 
-
+                //Gets data from every saved trip in firebase und the dbRef and adds them to trips
                 dataSnapshot.children.forEach { tripSnapshot ->
                     val trip = tripSnapshot.getValue<Trip>()
                     trip?.id = tripSnapshot.key.toString()
@@ -33,7 +33,7 @@ class TripFirebaseStore: TripStore {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+                TODO("Handle error")
             }
 
         })

@@ -24,15 +24,15 @@
                 android:layout_height="100dp"
                 android:elevation="12dp"
                 android:id="@+id/cv_profile_picture_iv"
-                app:cardCornerRadius="40dp"
-                android:layout_centerHorizontal="true">
+                app:cardCornerRadius="40dp">
 
                 <ImageView
                     android:layout_height="100dp"
                     android:layout_width="match_parent"
                     android:id="@+id/iv_profile_picture"
                     android:src="@drawable/placeholder"
-                    android:scaleType="centerCrop"/>
+                    android:scaleType="centerCrop"
+                    android:contentDescription="@string/iv_profile_picture_content_description" />
 
             </androidx.cardview.widget.CardView>
 
@@ -74,6 +74,9 @@
                     android:id="@+id/et_profile_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:maxLength="20"
+                    android:maxLines="1"
                     />
             </com.google.android.material.textfield.TextInputLayout>
 

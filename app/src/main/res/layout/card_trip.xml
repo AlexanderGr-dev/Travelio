@@ -51,7 +51,7 @@
                 android:textColor="?android:attr/textColorSecondary"
                 app:drawableStartCompat="@drawable/ic_baseline_calendar_today_24" />
             <TextView
-                android:id="@+id/trip_accomodation"
+                android:id="@+id/trip_accommodation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"

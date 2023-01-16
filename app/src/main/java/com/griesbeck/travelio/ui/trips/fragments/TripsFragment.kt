@@ -7,19 +7,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.button.MaterialButton
-import com.griesbeck.travelio.TripAdapter
-import com.griesbeck.travelio.TripListener
+import com.griesbeck.travelio.ui.trips.adapters.TripAdapter
+import com.griesbeck.travelio.ui.trips.adapters.TripListener
 import com.griesbeck.travelio.databinding.FragmentTripsBinding
 import com.griesbeck.travelio.models.trips.Trip
 import com.griesbeck.travelio.ui.trips.activities.TripActivity
 import com.griesbeck.travelio.ui.trips.activities.TripDetailActivity
 import com.griesbeck.travelio.ui.trips.viewmodels.TripsViewModel
-import com.griesbeck.travelio.ui.viewmodels.SharedTripViewModel
-import com.griesbeck.travelio.ui.viewmodels.SharedTripViewModelFactory
+import com.griesbeck.travelio.ui.trips.viewmodels.SharedTripViewModel
+import com.griesbeck.travelio.ui.trips.viewmodels.SharedTripViewModelFactory
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -29,23 +29,18 @@ import java.util.*
 class TripsFragment : Fragment(), TripListener {
 
     private var _binding: FragmentTripsBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
-    //private val tripsViewModel = ViewModelProvider(this).get(TripsViewModel::class.java)
-    private val currentlayoutManager = GridLayoutManager(this.context,2)
-    val upcomingLayoutManager = GridLayoutManager(this.context,2)
-    val pastLayoutManager = GridLayoutManager(this.context,2)
+    private val currentLayoutManager = GridLayoutManager(this.context,2)
+    private val upcomingLayoutManager = GridLayoutManager(this.context,2)
+    private val pastLayoutManager = GridLayoutManager(this.context,2)
     private var trips: List<Trip>? = null
+    private val tripsViewModel: TripsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-        val tripsViewModel = ViewModelProvider(this).get(TripsViewModel::class.java)
 
         _binding = FragmentTripsBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -55,13 +50,12 @@ class TripsFragment : Fragment(), TripListener {
             startActivity(tripIntent)
         }
 
-
-        tripsViewModel.trips.observe(viewLifecycleOwner, Observer { trips ->
+        tripsViewModel.trips.observe(viewLifecycleOwner) { trips ->
             this.trips = trips
             val checkedButtonId = binding.toggleButton.checkedButtonId
             val checkedButton: MaterialButton = binding.toggleButton.findViewById(checkedButtonId)
-            onToggleGroupClick(trips,checkedButton)
-        })
+            onToggleGroupClick(trips, checkedButton)
+        }
 
         return root
     }
@@ -72,8 +66,6 @@ class TripsFragment : Fragment(), TripListener {
     }
 
     override fun onTripClick(trip: Trip, pair: Pair<View, String>) {
-        val tripViewModel = ViewModelProvider(this, SharedTripViewModelFactory.getInstance()).get(
-            SharedTripViewModel::class.java)
         val tripDetailIntent = Intent(this.context, TripDetailActivity::class.java)
         val options =
             ActivityOptionsCompat.makeSceneTransitionAnimation(
@@ -82,12 +74,14 @@ class TripsFragment : Fragment(), TripListener {
                 pair.second
             )
 
+        val tripViewModel: SharedTripViewModel =
+            ViewModelProvider(this, SharedTripViewModelFactory.getInstance())[SharedTripViewModel::class.java]
         tripViewModel.setSelectedTrip(trip)
         tripDetailIntent.putExtra("transition",pair.second)
         startActivity(tripDetailIntent, options.toBundle())
     }
 
-    fun onToggleGroupClick(trips: List<Trip>?, checkedButton: MaterialButton) {
+    private fun onToggleGroupClick(trips: List<Trip>?, checkedButton: MaterialButton) {
 
         val upcomingTrips = ArrayList<Trip>()
         val pastTrips = ArrayList<Trip>()
@@ -103,12 +97,14 @@ class TripsFragment : Fragment(), TripListener {
                     val endDate = format.parse(trip.endDate)
                     val currentDateTime = LocalDateTime.now().format(pattern)
                     val currentDate = currentFormat.parse(currentDateTime)
-                    if(startDate > currentDate){
-                        upcomingTrips.add(trip)
-                    }else if(endDate < currentDate){
-                        pastTrips.add(trip)
-                    }else{
-                        currentTrips.add(trip)
+                    if (startDate != null && endDate != null) {
+                        if(startDate > currentDate){
+                            upcomingTrips.add(trip)
+                        }else if(endDate < currentDate){
+                            pastTrips.add(trip)
+                        }else{
+                            currentTrips.add(trip)
+                        }
                     }
                 }catch (e: Exception){
                     e.printStackTrace()
@@ -140,7 +136,7 @@ class TripsFragment : Fragment(), TripListener {
         }
 
         binding.btnCurrent.setOnClickListener{
-            binding.rvTrips.layoutManager = currentlayoutManager
+            binding.rvTrips.layoutManager = currentLayoutManager
             binding.rvTrips.adapter = TripAdapter(currentTrips,this)
         }
 

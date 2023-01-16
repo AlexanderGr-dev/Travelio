@@ -28,11 +28,12 @@ class UserFirebaseStore: UserStore {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val currentUserId = FirebaseAuth.getInstance().currentUser?.uid.toString()
 
+                // Gets the current in Firebase authenticated user data
                     val actualUser =
                         dataSnapshot.child(currentUserId).child("user_data").getValue<User>()
+
                 if(actualUser != null) {
                     liveData.postValue(actualUser)
-                    Log.i("i", liveData.value.toString())
                 }
 
             }
@@ -63,14 +64,10 @@ class UserFirebaseStore: UserStore {
         if(dbRef.child(user.id).key != null) {
             dbRef.child(user.id).removeValue()
         }
-        val firebaseUser = FirebaseAuth.getInstance().currentUser
 
         AuthUI.getInstance().delete(context).addOnCompleteListener {
-
+            Toast.makeText(context, "Account was deleted successfully.", Toast.LENGTH_LONG).show()
         }
 
-        /*firebaseUser?.delete()?.addOnCompleteListener {
-            Toast.makeText(context, "Account was deleted successfully.", Toast.LENGTH_LONG).show()
-        }*/
     }
 }

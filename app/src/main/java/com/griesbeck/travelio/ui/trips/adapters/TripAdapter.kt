@@ -1,10 +1,12 @@
-package com.griesbeck.travelio
+package com.griesbeck.travelio.ui.trips.adapters
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.griesbeck.travelio.R
 import com.griesbeck.travelio.databinding.CardTripBinding
+import com.griesbeck.travelio.helpers.stringToBitMap
 import com.griesbeck.travelio.models.trips.Trip
 
 interface TripListener {
@@ -27,8 +29,9 @@ class TripAdapter(private val trips: List<Trip>, private val listener: TripListe
                 val period = "${trip.startDate} - ${trip.endDate}"
                 binding.locationTitle.text = trip.location
                 binding.tvTripPeriod.text = period
-                binding.tripAccomodation.text = trip.accommodation
+                binding.tripAccommodation.text = trip.accommodation
                 binding.root.setOnClickListener {
+                    // Initialize pair for shared element transition
                     val pair = Pair(
                         binding.ivLocation as View,
                         binding.ivLocation.transitionName

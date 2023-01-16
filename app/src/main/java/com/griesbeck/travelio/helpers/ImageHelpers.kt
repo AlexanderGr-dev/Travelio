@@ -1,4 +1,4 @@
-package com.griesbeck.travelio
+package com.griesbeck.travelio.helpers
 
 import android.content.Context
 import android.content.Intent
@@ -22,6 +22,7 @@ fun showImagePicker(intentLauncher: ActivityResultLauncher<Intent>, context: Con
     intentLauncher.launch(imagePickerTargetIntent)
 }
 
+//Source: https://stackoverflow.com/questions/48437564/how-can-i-convert-bitmap-to-string-string-to-bitmap-in-kotlin
 fun bitMapToString(bitmap: Bitmap): String {
     val baos = ByteArrayOutputStream()
     bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
@@ -35,11 +36,12 @@ fun stringToBitMap(pic: String): Bitmap? {
             Base64.decode(pic, Base64.DEFAULT)
         BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
     } catch (e: Exception) {
+        e.printStackTrace()
         null
     }
 }
 
-//https://stackoverflow.com/questions/4837715/how-to-resize-a-bitmap-in-android
+//Source: https://stackoverflow.com/questions/4837715/how-to-resize-a-bitmap-in-android
 fun getResizedBitmap(bm: Bitmap, newWidth: Int, newHeight: Int): Bitmap? {
     val width = bm.width
     val height = bm.height
